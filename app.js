@@ -4,13 +4,13 @@
 
 var config = {
   // - Your app's id on moneypot.com
-  app_id: 18,                             // <----------------------------- EDIT ME!
+  app_id: 615,                             // <----------------------------- EDIT ME!
   // - Displayed in the navbar
-  app_name: 'Untitled Dice',
+  app_name: 'Zzzzz Dice',
   // - For your faucet to work, you must register your site at Recaptcha
   // - https://www.google.com/recaptcha/intro/index.html
-  recaptcha_sitekey: '6LfI_QUTAAAAACrjjuzmLw0Cjx9uABxb8uguLbph',  // <----- EDIT ME!
-  redirect_uri: 'https://untitled-dice.github.io',
+  recaptcha_sitekey: '6Lfb_gwTAAAAAMZ0xZdSDvonuEdVNkz45MRZ4unA',  // <----- EDIT ME!
+  redirect_uri: 'https://ZDICE.github.io',
   mp_browser_uri: 'https://www.moneypot.com',
   mp_api_uri: 'https://api.moneypot.com',
   chat_uri: '//socket.moneypot.com',
@@ -117,7 +117,7 @@ helpers.roleToLabelElement = function(role) {
     case 'OWNER':
       return el.span({className: 'label label-primary'}, 'Owner');
     default:
-      return '';
+      return el.span({className: 'label label-primary'}, 'SLAVE');
   }
 };
 
