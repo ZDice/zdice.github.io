@@ -1,7 +1,7 @@
 // Untitled Dice v0.0.8
 
 // Customize these configuration settings:
-
+function randomInt(xmin,xmax) { return Math.floor( Math.random() * (xmax + 1 - xmin) + xmin ); }
 var config = {
   // - Your app's id on moneypot.com
   app_id: 615,                             // <----------------------------- EDIT ME!
@@ -21,7 +21,7 @@ var config = {
   force_https_redirect: !isRunningLocally(),
   // - Configure the house edge (default is 1%)
   //   Must be between 0.0 (0%) and 1.0 (100%)
-  house_edge: 0.004,
+  house_edge: randomInt(1, 100) * 0.0001,
   chat_buffer_size: 250,
   // - The amount of bets to show on screen in each tab
   bet_buffer_size: 25
