@@ -1135,7 +1135,7 @@ var BetBoxProfit = React.createClass({
       innerNode = el.span(
         {
           className: 'lead',
-          style: { color: 'white' }
+          style: { color: '#39b54a' }
         },
         '+' + profit.toFixed(2) + '  Satoshis'
       );
