@@ -485,19 +485,22 @@ var betStore = new Store('bet', {
     self.emitter.emit('change', self.state);
   });
 
-  Dispatcher.registerCallback('UPDATE_WAGER', function(newWager) {
+   Dispatcher.registerCallback('UPDATE_WAGER', function(newWager) {
     self.state.wager = _.merge({}, self.state.wager, newWager);
 
     var n = parseInt(self.state.wager.str, 10);
 
     // If n is a number, ensure it's at least 1 bit
-   
+    if (isFinite(n)) {
+      n = Math.max(n, 1);
+      self.state.wager.str = n.toString();
+    }
 
     // Ensure wagerString is a number
     if (isNaN(n) || /[^\d]/.test(n.toString())) {
-     
+      self.state.wager.error = 'INVALID_WAGER';
     // Ensure user can afford balance
-    } else if (n  > worldStore.state.user.balance / 100) {
+    } else if (n * 100 > worldStore.state.user.balance) {
       self.state.wager.error = 'CANNOT_AFFORD_WAGER';
       self.state.wager.num = n;
     } else {
