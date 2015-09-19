@@ -492,7 +492,7 @@ var betStore = new Store('bet', {
 
     // If n is a number, ensure it's at least 1 bit
     if (isFinite(n)) {
-      n = Math.max(n, 0.01);
+      n = Math.max(n, 1);
       self.state.wager.str = n.toString();
     }
 
@@ -725,7 +725,7 @@ var UserBox = React.createClass({
             className: 'navbar-text',
             style: {marginRight: '5px'}
           },
-          (worldStore.state.user.balance) + ' satoshis',
+          (worldStore.state.user.balance / 100000000) + ' satoshis',
           !worldStore.state.user.unconfirmed_balance ?
            '' :
            el.span(
@@ -1136,7 +1136,7 @@ var BetBoxProfit = React.createClass({
           className: 'lead',
           style: { color: '#39b54a' }
         },
-        '+' + profit.toFixed(8)
+        '+' + profit.toFixed(8) / 100000000
       );
     }
 
@@ -1377,7 +1377,7 @@ var BetBoxButton = React.createClass({
       var hash = betStore.state.nextHash;
       console.assert(typeof hash === 'string');
 
-      var wagerSatoshis = betStore.state.wager.num;
+      var wagerSatoshis = betStore.state.wager.num / 100000000;
       var multiplier = betStore.state.multiplier.num;
       var payoutSatoshis = wagerSatoshis * multiplier;
 
