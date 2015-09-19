@@ -1449,7 +1449,7 @@ var BetBoxButton = React.createClass({
     if (worldStore.state.isLoading) {
       // If app is loading, then just disable button until state change
       innerNode = el.button(
-        {type: 'button', disabled: true, className: 'btn btn-lg btn-block btn-default'},
+        {type: 'button', disabled: false, className: 'btn btn-lg btn-block btn-default'},
         'Loading...'
       );
     } else if (error) {
