@@ -753,12 +753,9 @@ var UserBox = React.createClass({
         ),
         // Logged in as...
         el.span(
-          {className: 'navbar-text', color: 'red', background: 'green'},
+          {className: 'navbar-text', color: 'red', background-color: 'green'},
           'Logged in as ',
-          el.a({
-                    href: config.mp_browser_uri + '/users/' + null, worldStore.state.user.uname,
-                    target: '_blank'
-                  })
+          el.button(null, worldStore.state.user.uname)
         ),
         // Logout button
         el.button(
