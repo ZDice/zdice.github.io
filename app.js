@@ -2041,7 +2041,7 @@ var BetRow = React.createClass({
           }
         },
         bet.profit > 0 ?
-          '+' + helpers.round10(bet.profit/100, -2) :
+          '+' + helpers.round10(bet.profit, -2) :
           helpers.round10(bet.profit, -2),
         ' satoshis'
       )
