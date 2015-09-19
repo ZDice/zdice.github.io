@@ -71,6 +71,7 @@ body {
 /* Turn off redundant text-shadow */
 .btn kbd,
 .btn .label {
+    word-wrap: break-word;
     text-shadow: none;
 }
 
