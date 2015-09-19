@@ -31,19 +31,19 @@ body {
 .rotate {
     display: inline-block;
     -webkit-animation-name: rotate;
-    -webkit-animation-duration: 2s;
+    -webkit-animation-duration: 0s;
     -webkit-animation-iteration-count: infinite;
     -webkit-animation-timing-function: linear;
     -moz-animation-name: rotate;
-    -moz-animation-duration: 2s;
+    -moz-animation-duration: 0s;
     -moz-animation-iteration-count: infinite;
     -moz-animation-timing-function: linear;
     -o-animation-name: rotate;
-    -o-animation-duration: 2s;
+    -o-animation-duration: 0s;
     -o-animation-iteration-count: infinite;
     -o-animation-timing-function: linear;
     animation-name: rotate;
-    animation-duration: 2s;
+    animation-duration: 0s;
     animation-iteration-count: infinite;
     animation-timing-function: linear;
 }
