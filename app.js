@@ -1943,7 +1943,7 @@ var BetRow = React.createClass({
             fontFamily: 'monospace'
           }
         },
-        bet.cond + bet.target.toFixed(4)
+        bet.cond + bet.target.toFixed(2)
       ),
       // // Roll
       // el.td(
