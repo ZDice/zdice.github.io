@@ -1702,7 +1702,7 @@ var MyBetsTabContent = React.createClass({
     return el.div(
       null,
       el.table(
-        {className: 'table'},
+        {className: 'table', style{color:'#ffffff'}},
         el.thead(
           null,
           el.tr(
