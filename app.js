@@ -1865,7 +1865,7 @@ var FaucetTabContent = React.createClass({
     case 'SUCCESSFULLY_CLAIMED':
       innerNode = el.div(
         null,
-        'Successfully claimed ' + this.state.claimAmount/100 + ' bits.' +
+        'Successfully claimed ' + this.state.claimAmount + ' Satoshis.' +
           // TODO: What's the real interval?
           ' You can claim again in 5 minutes.'
       );
@@ -1931,8 +1931,8 @@ var BetRow = React.createClass({
       // Wager
       el.td(
         null,
-        helpers.round10(bet.wager/100, -2),
-        ' bits'
+        helpers.round10(bet.wager, -2),
+        ' satoshis'
       ),
       // Target
       el.td(
@@ -2042,8 +2042,8 @@ var BetRow = React.createClass({
         },
         bet.profit > 0 ?
           '+' + helpers.round10(bet.profit/100, -2) :
-          helpers.round10(bet.profit/100, -2),
-        ' bits'
+          helpers.round10(bet.profit, -2),
+        ' satoshis'
       )
     );
   }
