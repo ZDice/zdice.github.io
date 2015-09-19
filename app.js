@@ -492,7 +492,7 @@ var betStore = new Store('bet', {
 
     // If n is a number, ensure it's at least 1 bit
     if (isFinite(n)) {
-      n = Math.max(n, 1);
+      n = Math.max(n, 1) / 100;
       self.state.wager.str = n.toString();
     }
 
@@ -500,7 +500,7 @@ var betStore = new Store('bet', {
     if (isNaN(n) || /[^\d]/.test(n.toString())) {
       self.state.wager.error = 'INVALID_WAGER';
     // Ensure user can afford balance
-    } else if (n * 100 > worldStore.state.user.balance) {
+    } else if (n  > worldStore.state.user.balance / 100) {
       self.state.wager.error = 'CANNOT_AFFORD_WAGER';
       self.state.wager.num = n;
     } else {
