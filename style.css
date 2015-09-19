@@ -14,6 +14,7 @@ body {
 
 .chat-list {
     background-color: blue;
+    color: white;
     overflow-y: scroll;
     height: 215px;
     word-wrap: break-word;
