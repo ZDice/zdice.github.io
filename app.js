@@ -1092,7 +1092,7 @@ var BetBoxChance = React.createClass({
     } else {
       innerNode = el.span(
         {className: 'lead'},
-        ' ' + (winProb * 100).toFixed(2).toString() + '%'
+        ' ' + (winProb * 100).toFixed(4).toString() + '%'
       );
     }
 
@@ -1754,7 +1754,7 @@ var MyBetsTabContent = React.createClass({
               // target
               el.td(
                 null,
-                bet.meta.cond + ' ' + bet.meta.number.toFixed(2)
+                bet.meta.cond + ' ' + bet.meta.number.toFixed(4)
               ),
               // roll
               el.td(
@@ -1943,7 +1943,7 @@ var BetRow = React.createClass({
             fontFamily: 'monospace'
           }
         },
-        bet.cond + bet.target.toFixed(2)
+        bet.cond + bet.target.toFixed(4)
       ),
       // // Roll
       // el.td(
