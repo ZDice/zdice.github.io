@@ -725,7 +725,7 @@ var UserBox = React.createClass({
             className: 'navbar-text',
             style: {marginRight: '5px'}
           },
-          (worldStore.state.user.balance / 100) + ' bits',
+          (worldStore.state.user.balance) + ' satoshis',
           !worldStore.state.user.unconfirmed_balance ?
            '' :
            el.span(
