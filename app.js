@@ -1702,6 +1702,7 @@ var MyBetsTabContent = React.createClass({
           null,
           el.tr(
             null,
+            style: { color: 'white' },
             el.th(null, 'ID'),
             el.th(null, 'Time'),
             el.th(null, 'User'),
@@ -1709,7 +1710,7 @@ var MyBetsTabContent = React.createClass({
             el.th(null, 'Target'),
             el.th(null, 'Roll'),
             el.th(null, 'Profit')
-          )
+          ), 
         ),
         el.tbody(
           null,
