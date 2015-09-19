@@ -5,6 +5,11 @@ body {
     margin-left: auto;
     margin-right: auto;
 }
+.text-right.text-muted{
+    color:red;
+    background-color:black;
+    size: 24px;
+}
 .table{
     color:white;
     background-color:black;
