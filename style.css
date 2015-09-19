@@ -5,6 +5,10 @@ body {
     margin-left: auto;
     margin-right: auto;
 }
+.table{
+    color:white;
+    background-color:black;
+}
 .username {
     color:white;
     size: 32px;
