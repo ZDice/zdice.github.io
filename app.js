@@ -753,7 +753,7 @@ var UserBox = React.createClass({
         ),
         // Logged in as...
         el.span(
-          {className: 'navbar-text'},
+          {className: 'navbar-text', color: 'red', background: 'green'},
           'Logged in as ',
           el.code(null, worldStore.state.user.uname)
         ),
