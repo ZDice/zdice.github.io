@@ -2,6 +2,10 @@ body {
     background-color: black;
     margin-top: 20px;
 }
+.username {
+    color:white;
+    size: 32px;
+}
 .navbar-text {
     color: red;
     size: 32px;
