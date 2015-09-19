@@ -1377,7 +1377,7 @@ var BetBoxButton = React.createClass({
       var hash = betStore.state.nextHash;
       console.assert(typeof hash === 'string');
 
-      var wagerSatoshis = betStore.state.wager.num;
+      var wagerSatoshis = betStore.state.wager.num / 100;
       var multiplier = betStore.state.multiplier.num;
       var payoutSatoshis = wagerSatoshis * multiplier;
 
@@ -1387,7 +1387,7 @@ var BetBoxButton = React.createClass({
 
       var params = {
         wager: wagerSatoshis,
-        client_seed: 0, // TODO
+        client_seed: randomInt(0, 999999999), // TODO
         hash: hash,
         cond: cond,
         target: number,
