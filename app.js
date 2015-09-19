@@ -1711,7 +1711,7 @@ var MyBetsTabContent = React.createClass({
              el.th(null, 'Roll'),
              el.th(null, 'Profit')
 -          )
-+          ), 
++          )
          ),
          el.tbody(
            null,
