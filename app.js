@@ -1273,7 +1273,7 @@ var BetBoxWager = React.createClass({
     // If user is logged in, use their balance as max wager
     var balanceBits;
     if (worldStore.state.user) {
-      balanceBits = Math.floor(worldStore.state.user.balance / 100);
+      balanceBits = Math.floor(worldStore.state.user.balance);
     } else {
       balanceBits = 42000;
     }
