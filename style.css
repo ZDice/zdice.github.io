@@ -6,6 +6,8 @@ body {
     margin-right: auto;
 }
 .text-right.text-muted{
+    -webkit-marquee: auto medium infinite scroll normal; 
+overflow-x: -webkit-marquee;
     color:red;
     background-color:black;
     size: 24px;
