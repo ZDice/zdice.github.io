@@ -82,6 +82,6 @@ body {
     background-image: none;
 }
 /* Bet Buttons */
-.btn btn-lg btn-primary btn-block{
+.btn{
     word-wrap: break-word;
 }
