@@ -2,7 +2,10 @@ body {
     background-color: black;
     margin-top: 20px;
 }
-
+.navbar-text {
+    color: red;
+    background-color: yellow;
+}
 .navbar .navbar-brand {
     color: white;
 }
