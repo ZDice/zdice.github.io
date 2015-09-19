@@ -1482,6 +1482,7 @@ var BetBoxButton = React.createClass({
                 id: 'bet-hi',
                 type: 'button',
                 className: 'btn btn-lg btn-primary btn-block',
+                word-wrap: 'break-word',
                 onClick: this._makeBetHandler('>'),
                 disabled: !!this.state.waitingForServer
               },
