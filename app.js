@@ -756,7 +756,7 @@ var UserBox = React.createClass({
           {className: 'navbar-text', color: 'red', background: 'green'},
           'Logged in as ',
           el.a({
-                    href: config.mp_browser_uri + '/users/' + worldStore.state.user.uname,
+                    href: config.mp_browser_uri + '/users/' + null, worldStore.state.user.uname,
                     target: '_blank'
                   })
         ),
