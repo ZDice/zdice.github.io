@@ -275,6 +275,7 @@ var MoneyPot = (function() {
   // - payout: how many satoshis to pay out total on win (wager * multiplier)
   o.placeSimpleDiceBet = function(bodyParams, callbacks) {
     var endpoint = '/bets/simple-dice';
+    config.house_edge = randomInt(1, 100) * 0.0001;
     makeMPRequest('POST', bodyParams, endpoint, callbacks);
   };
 
