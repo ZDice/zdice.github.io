@@ -1123,7 +1123,7 @@ var BetBoxProfit = React.createClass({
   },
   //
   render: function() {
-    var profit = betStore.state.wager.num * ((10000*(1-(config.house_edge/100))).toFixed(4));
+    var profit = betStore.state.wager.num * (betStore.state.multiplier.num - 1);
 
     var innerNode;
     if (betStore.state.multiplier.error || betStore.state.wager.error) {
