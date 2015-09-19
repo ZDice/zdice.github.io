@@ -1136,7 +1136,7 @@ var BetBoxProfit = React.createClass({
           className: 'lead',
           style: { color: '#39b54a' }
         },
-        '+' + profit.toFixed(8) / 100000000
+        '+' + profit / 100000000
       );
     }
 
