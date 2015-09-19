@@ -1,6 +1,9 @@
 body {
-    background-color: black;
-    margin-top: 20px;
+    background-image: url("http://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-184699.jpg");
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: auto;
+    margin-right: auto;
 }
 .username {
     color:white;
