@@ -754,7 +754,7 @@ var UserBox = React.createClass({
         // Logged in as...
         el.span(
           {className: 'navbar-text', color: 'red'},
-          'Logged in as '+ worldStore.state.user.uname
+          'Logged in as '
         ),
         el.span(
           {className: 'username', color: 'green'},
