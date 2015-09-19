@@ -488,11 +488,11 @@ var betStore = new Store('bet', {
    Dispatcher.registerCallback('UPDATE_WAGER', function(newWager) {
     self.state.wager = _.merge({}, self.state.wager, newWager);
 
-    var n = parseInt(self.state.wager.str, 10);
+    var n = parseInt(self.state.wager.str, 10) / 100;
 
     // If n is a number, ensure it's at least 1 bit
     if (isFinite(n)) {
-      n = Math.max(n, 1);
+      n = Math.max(n, 1) / 100;
       self.state.wager.str = n.toString();
     }
 
