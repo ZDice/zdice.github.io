@@ -591,7 +591,7 @@ var worldStore = new Store('world', {
     self.emitter.emit('change', self.state);
   });
 
-  Dispatcher.registerCallback('INIT_ALL_BETS', function(bets) {
+  Dispatcher.registerCallback('INIT_BET', function(bets) {
     console.assert(_.isArray(bets));
     self.state.allBets.push.apply(self.state.allBets, bets);
     self.emitter.emit('change', self.state);
@@ -1702,7 +1702,7 @@ var MyBetsTabContent = React.createClass({
     return el.div(
       null,
       el.table(
-        {className: 'table'},
+        {className: 'table', color: 'white'},
         el.thead(
           null,
           el.tr(
