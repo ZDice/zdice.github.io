@@ -725,7 +725,7 @@ var UserBox = React.createClass({
             className: 'navbar-text',
             style: {marginRight: '5px'}
           },
-          (worldStore.state.user.balance / 100000000),
+          (worldStore.state.user.balance).toFixed(2) + 'Satoshis',
           !worldStore.state.user.unconfirmed_balance ?
            '' :
            el.span(
@@ -1136,7 +1136,7 @@ var BetBoxProfit = React.createClass({
           className: 'lead',
           style: { color: '#39b54a' }
         },
-        '+' + profit.toFixed(2)
+        '+' + profit.toFixed(2) + 'Satoshis'
       );
     }
 
