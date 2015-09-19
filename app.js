@@ -1700,21 +1700,19 @@ var MyBetsTabContent = React.createClass({
         {className: 'table'},
         el.thead(
           null,
-           el.tr(
-             null,
-+            style: { color: 'white' },
-             el.th(null, 'ID'),
-             el.th(null, 'Time'),
-             el.th(null, 'User'),
-             el.th(null, 'Wager'),
-             el.th(null, 'Target'),
-             el.th(null, 'Roll'),
-             el.th(null, 'Profit')
--          )
-+          )
-         ),
-         el.tbody(
-           null,
+          el.tr(
+            null,
+            el.th(null, 'ID'),
+            el.th(null, 'Time'),
+            el.th(null, 'User'),
+            el.th(null, 'Wager'),
+            el.th(null, 'Target'),
+            el.th(null, 'Roll'),
+            el.th(null, 'Profit')
+          )
+        ),
+        el.tbody(
+          null,
           worldStore.state.bets.toArray().map(function(bet) {
             return el.tr(
               {
