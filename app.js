@@ -757,7 +757,7 @@ var UserBox = React.createClass({
           'Logged in as ' 
         ),
         el.span(
-          {className: 'username', color: 'green'},
+          {className: 'username', color: '#39b54a'},
           worldStore.state.user.uname
           ),
         // Logout button
