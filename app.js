@@ -725,7 +725,7 @@ var UserBox = React.createClass({
             className: 'navbar-text',
             style: {marginRight: '5px'}
           },
-          (worldStore.state.user.balance / 100000000) + ' satoshis',
+          (worldStore.state.user.balance / 100000000),
           !worldStore.state.user.unconfirmed_balance ?
            '' :
            el.span(
@@ -1377,7 +1377,7 @@ var BetBoxButton = React.createClass({
       var hash = betStore.state.nextHash;
       console.assert(typeof hash === 'string');
 
-      var wagerSatoshis = betStore.state.wager.num / 10;
+      var wagerSatoshis = betStore.state.wager.num;
       var multiplier = betStore.state.multiplier.num;
       var payoutSatoshis = wagerSatoshis * multiplier;
 
