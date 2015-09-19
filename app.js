@@ -1048,7 +1048,7 @@ var ChatBox = React.createClass({
       el.p(
         {
           className: 'text-right text-muted',
-          style: { marginTop: '-15px' }
+          style: { marginTop: '-15px', background-color: 'black' }
         },
         'Users online: ' + Object.keys(chatStore.state.userList).length + ' ',
         // Show/Hide userlist button
