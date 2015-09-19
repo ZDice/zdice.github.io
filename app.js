@@ -6,7 +6,7 @@ var config = {
   // - Your app's id on moneypot.com
   app_id: 615,                             // <----------------------------- EDIT ME!
   // - Displayed in the navbar
-  app_name: 'Z Nation',
+  app_name: 'Zombie Dice',
   // - For your faucet to work, you must register your site at Recaptcha
   // - https://www.google.com/recaptcha/intro/index.html
   recaptcha_sitekey: '6Lfb_gwTAAAAAMZ0xZdSDvonuEdVNkz45MRZ4unA',  // <----- EDIT ME!
@@ -111,13 +111,13 @@ helpers.calcNumber = function(cond, winProb) {
 helpers.roleToLabelElement = function(role) {
   switch(role) {
     case 'ADMIN':
-      return el.span({className: 'label label-danger'}, 'MoneyPot STAFF');
+      return el.span({className: 'label label-danger'}, 'MP Staff');
     case 'MOD':
-      return el.span({className: 'label label-info'}, 'MOD-Virus');
+      return el.span({className: 'label label-info'}, 'Mod');
     case 'OWNER':
-      return el.span({className: 'label label-primary'}, 'Z-VIRUS');
+      return el.span({className: 'label label-primary'}, 'Owner');
     default:
-      return el.span({className: 'label label-primary'}, 'ZOMBIE');
+      return el.span({className: 'label label-primary'}, 'SLAVE');
   }
 };
 
@@ -591,7 +591,7 @@ var worldStore = new Store('world', {
     self.emitter.emit('change', self.state);
   });
 
-  Dispatcher.registerCallback('INIT_BET', function(bets) {
+  Dispatcher.registerCallback('INIT_ALL_BETS', function(bets) {
     console.assert(_.isArray(bets));
     self.state.allBets.push.apply(self.state.allBets, bets);
     self.emitter.emit('change', self.state);
@@ -757,7 +757,7 @@ var UserBox = React.createClass({
           'Logged in as ' 
         ),
         el.span(
-          {className: 'username', color: 'green', text-align: left},
+          {className: 'username', color: 'green'},
           worldStore.state.user.uname
           ),
         // Logout button
@@ -1702,7 +1702,7 @@ var MyBetsTabContent = React.createClass({
     return el.div(
       null,
       el.table(
-        {className: 'table', color: 'white'},
+        {className: 'table'},
         el.thead(
           null,
           el.tr(
