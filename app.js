@@ -2353,7 +2353,7 @@ $(document).on('keydown', function(e) {
   }
 
   // Bail if it's not a key we care about
-  if (keyCode !== H && keyCode !== L && keyCode !== X && keyCode !== C) {
+  if (keyCode !== H && keyCode !== L && keyCode !== X && keyCode !== C && keyCode !== Z) {
     return;
   }
 
@@ -2364,6 +2364,7 @@ $(document).on('keydown', function(e) {
   switch(keyCode) {
     case Z:
       Dispatcher.sendAction('UPDATE_WAGER', { str: 1});
+      break;
     case C:  // Increase wager
       var upWager = betStore.state.wager.num * 2;
       Dispatcher.sendAction('UPDATE_WAGER', {
