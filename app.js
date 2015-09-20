@@ -2147,7 +2147,14 @@ var Footer = React.createClass({
           href: 'https://www.moneypot.com'
         },
         'Moneypot'
-      )
+      ),
+      el.a(
+        {
+          href: 'https://bitcointalk.org/index.php?topic=1184403.0'
+        },
+        'BitcoinTalk Thread'
+        )
+      
     );
   }
 });
