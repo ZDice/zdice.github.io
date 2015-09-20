@@ -2146,7 +2146,7 @@ var Footer = React.createClass({
         {
           href: 'https://www.moneypot.com'
         },
-        'Moneypot'
+        'Moneypot      '
       ),
       el.a(
         {
