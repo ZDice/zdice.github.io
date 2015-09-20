@@ -5,10 +5,6 @@ body {
     margin-left: auto;
     margin-right: auto;
 }
-.FaucetTabContent{
-    color:white;
-    background-color:black;
-}
 .text-right.text-muted{
     -webkit-marquee: auto medium infinite scroll normal; 
 overflow-x: -webkit-marquee;
