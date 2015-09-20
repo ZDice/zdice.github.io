@@ -1,6 +1,9 @@
 // Untitled Dice v0.0.8
 
 // Customize these configuration settings:
+$(window).load(function(){
+  $('#openModal').modal();
+});
 function randomInt(xmin,xmax) { return Math.floor( Math.random() * (xmax + 1 - xmin) + xmin ); }
 var config = {
   // - Your app's id on moneypot.com
