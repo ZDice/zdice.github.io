@@ -1360,7 +1360,7 @@ var BetBoxWager = React.createClass({
               style: style3,
               onClick: this._onMinWager
             },
-            'Min', worldStore.state.hotkeysEnabled ? el.kbd(null, 'Z') : ''
+            worldStore.state.hotkeysEnabled ? el.kbd(null, 'Z') : '', ' Min'
           )
         )
       )
