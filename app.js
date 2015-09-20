@@ -1325,7 +1325,7 @@ var BetBoxWager = React.createClass({
               style: style2,
               onClick: this._onHalveWager
             },
-            '1/2x ', worldStore.state.hotkeysEnabled ? el.kbd(null, 'X') : ''
+            worldStore.state.hotkeysEnabled ? el.kbd(null, 'X') : '','1/2x ' 
           )
         ),
         el.div(
