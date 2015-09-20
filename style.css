@@ -20,6 +20,22 @@ body {
 	transition: opacity 400ms ease-in;
 	pointer-events: none;
 }
+.modalDialog:target {
+	opacity:1;
+	pointer-events: auto;
+}
+
+.modalDialog > div {
+	width: 400px;
+	position: relative;
+	margin: 10% auto;
+	padding: 5px 20px 13px 20px;
+	border-radius: 10px;
+	background: #fff;
+	background: -moz-linear-gradient(#fff, #999);
+	background: -webkit-linear-gradient(#fff, #999);
+	background: -o-linear-gradient(#fff, #999);
+}
 .text-right.text-muted{
     -webkit-marquee: auto medium infinite scroll normal; 
 overflow-x: -webkit-marquee;
