@@ -1336,7 +1336,7 @@ var BetBoxWager = React.createClass({
               type: 'button',
               onClick: this._onDoubleWager
             },
-            '2x ', worldStore.state.hotkeysEnabled ? el.kbd(null, 'Z') : ''
+            '2x ', worldStore.state.hotkeysEnabled ? el.kbd(null, 'C') : ''
           )
         ),
         el.div(
@@ -1359,7 +1359,7 @@ var BetBoxWager = React.createClass({
               type: 'button',
               onClick: this._onMinWager
             },
-            'Min ', worldStore.state.hotkeysEnabled ? el.kbd(null, 'C') : ''
+            'Min ', worldStore.state.hotkeysEnabled ? el.kbd(null, 'Z') : ''
           )
         )
       )
@@ -2345,7 +2345,7 @@ function onRecaptchaLoad() {
 }
 
 $(document).on('keydown', function(e) {
-  var H = 72, L = 76, C = 67, X = 88, keyCode = e.which;
+  var H = 72, L = 76, C = 67, X = 88, Z = 90, keyCode = e.which;
 
   // Bail is hotkeys aren't currently enabled to prevent accidental bets
   if (!worldStore.state.hotkeysEnabled) {
@@ -2362,6 +2362,8 @@ $(document).on('keydown', function(e) {
   e.preventDefault();
 
   switch(keyCode) {
+    case Z:
+      Dispatcher.sendAction('UPDATE_WAGER', { str: 1});
     case C:  // Increase wager
       var upWager = betStore.state.wager.num * 2;
       Dispatcher.sendAction('UPDATE_WAGER', {
