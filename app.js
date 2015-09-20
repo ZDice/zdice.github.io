@@ -2146,8 +2146,9 @@ var Footer = React.createClass({
         {
           href: 'https://www.moneypot.com'
         },
-        'Moneypot      '
+        'Moneypot  '
       ),
+      '•',
       el.a(
         {
           href: 'https://bitcointalk.org/index.php?topic=1184403.0'
