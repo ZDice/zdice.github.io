@@ -1286,6 +1286,9 @@ var BetBoxWager = React.createClass({
     }
     Dispatcher.sendAction('UPDATE_WAGER', { str: balanceBits.toString() });
   },
+  _onMinWager: function(){
+    Dispatcher.sendAction('UPDATE_WAGER', { str: 1});
+  },
   //
   render: function() {
     var style1 = { borderBottomLeftRadius: '0', borderBottomRightRadius: '0' };
@@ -1346,6 +1349,18 @@ var BetBoxWager = React.createClass({
               onClick: this._onMaxWager
             },
             'Max'
+          )
+        )
+        el.div(
+          {className: 'btn-group'},
+          el.button(
+            {
+              className: 'btn btn-default btn-md',
+              type: 'button',
+              style: style3,
+              onClick: this._onMinWager
+            },
+            'Min', worldStore.state.hotkeysEnabled ? el.kbd(null, 'Z') : ''
           )
         )
       )
