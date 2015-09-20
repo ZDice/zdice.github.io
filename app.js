@@ -1336,7 +1336,7 @@ var BetBoxWager = React.createClass({
               type: 'button',
               onClick: this._onDoubleWager
             },
-            '2x ', worldStore.state.hotkeysEnabled ? el.kbd(null, 'C') : ''
+            '2x ', worldStore.state.hotkeysEnabled ? el.kbd(null, 'Z') : ''
           )
         ),
         el.div(
@@ -1357,9 +1357,9 @@ var BetBoxWager = React.createClass({
             {
               className: 'btn btn-default btn-md',
               type: 'button',
-              onClick: this._onMinWager
+              onClick: this._onDoubleWager
             },
-            worldStore.state.hotkeysEnabled ? el.kbd(null, 'Z') : '', ' Min'
+            'Min ', worldStore.state.hotkeysEnabled ? el.kbd(null, 'C') : ''
           )
         )
       )
