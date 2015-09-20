@@ -1809,6 +1809,7 @@ var FaucetTabContent = React.createClass({
       }
     );
   },
+  FauceTabContent.style.backgroundColor = "black";
   // `response` is the g-recaptcha-response returned from google
   _onRecaptchaSubmit: function(response) {
     var self = this;
