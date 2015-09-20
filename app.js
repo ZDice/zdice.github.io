@@ -1787,6 +1787,7 @@ var MyBetsTabContent = React.createClass({
 });
 
 var FaucetTabContent = React.createClass({
+  style: { background-color: 'black' },
   displayName: 'FaucetTabContent',
   getInitialState: function() {
     return {
