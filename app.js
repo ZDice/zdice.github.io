@@ -1350,7 +1350,7 @@ var BetBoxWager = React.createClass({
             },
             'Max'
           )
-        )
+        ),
         el.div(
           {className: 'btn-group'},
           el.button(
