@@ -1305,13 +1305,23 @@ var BetBoxWager = React.createClass({
       ),
       el.input(
         {
+          value: client_seed,
+          type: 'text',
+          className: 'form-control input-lg',
+          style: style1,
+          disabled: !!worldStore.state.isLoading,
+          placeholder: '#####'
+        }
+      ),
+      el.input(
+        {
           value: betStore.state.wager.str,
           type: 'text',
           className: 'form-control input-lg',
           style: style1,
           onChange: this._onWagerChange,
           disabled: !!worldStore.state.isLoading,
-          placeholder: 'Bits'
+          placeholder: 'Satoshis'
         }
       ),
       el.div(
