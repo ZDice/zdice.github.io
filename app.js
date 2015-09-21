@@ -475,6 +475,9 @@ var betStore = new Store('bet', {
     num: 1,
     error: undefined
   },
+  client_seed: {
+    num: prompt("Enter a Client Seed", "0")
+  }
   multiplier: {
     str: '2.00',
     num: 2.00,
@@ -1404,14 +1407,14 @@ var BetBoxButton = React.createClass({
       var wagerSatoshis = betStore.state.wager.num;
       var multiplier = betStore.state.multiplier.num;
       var payoutSatoshis = wagerSatoshis * multiplier;
-      var clientUpdate = prompt("Enter your client seed (Will ask every time you load to set a new one / same one", "0");
+      var cSeed = betStore.state.client_seed.num;
       var number = helpers.calcNumber(
         cond, helpers.multiplierToWinProb(multiplier)
       );
 
       var params = {
         wager: wagerSatoshis,
-        client_seed: clientUpdate, // TODO
+        client_seed: cSeed , // TODO
         hash: hash,
         cond: cond,
         target: number,
