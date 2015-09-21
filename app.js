@@ -475,9 +475,6 @@ var betStore = new Store('bet', {
     num: 1,
     error: undefined
   },
-  client_seed: {
-    num: prompt("Enter a Client Seed", "0")
-  },
   multiplier: {
     str: '2.00',
     num: 2.00,
