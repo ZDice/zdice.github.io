@@ -1404,7 +1404,7 @@ var BetBoxButton = React.createClass({
       var wagerSatoshis = betStore.state.wager.num;
       var multiplier = betStore.state.multiplier.num;
       var payoutSatoshis = wagerSatoshis * multiplier;
-      var clientUpdate = prompt("Enter your client seed (Will ask every time you load to set a new one / same one", "0")
+      var clientUpdate = prompt("Enter your client seed (Will ask every time you load to set a new one / same one", "0");
       var number = helpers.calcNumber(
         cond, helpers.multiplierToWinProb(multiplier)
       );
