@@ -24,10 +24,11 @@ var config = {
   force_https_redirect: !isRunningLocally(),
   // - Configure the house edge (default is 1%)
   //   Must be between 0.0 (0%) and 1.0 (100%)
-  house_edge: randomInt(10, 100) * 0.0001,
+  house_edge: 0.005,
   chat_buffer_size: 250,
   // - The amount of bets to show on screen in each tab
   bet_buffer_size: 25
+  client_seed: prompt("Enter your client seed (Will ask every time you load to set a new one / same one", "0");
 };
 
 ////////////////////////////////////////////////////////////
@@ -278,7 +279,7 @@ var MoneyPot = (function() {
   // - payout: how many satoshis to pay out total on win (wager * multiplier)
   o.placeSimpleDiceBet = function(bodyParams, callbacks) {
     var endpoint = '/bets/simple-dice';
-    config.house_edge = randomInt(10, 100) * 0.0001;
+    config.house_edge = 0.005;
     makeMPRequest('POST', bodyParams, endpoint, callbacks);
   };
 
@@ -1411,7 +1412,7 @@ var BetBoxButton = React.createClass({
 
       var params = {
         wager: wagerSatoshis,
-        client_seed: randomInt(0, 999999999), // TODO
+        client_seed: client_seed, // TODO
         hash: hash,
         cond: cond,
         target: number,
