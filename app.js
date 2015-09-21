@@ -736,7 +736,7 @@ var UserBox = React.createClass({
            '' :
            el.span(
              {style: { color: '#e67e22'}},
-             ' + ' + (worldStore.state.user.unconfirmed_balance / 100) + ' bits pending'
+             ' + ' + (worldStore.state.user.unconfirmed_balance) + ' satoshis pending'
            )
         ),
         // Refresh button
@@ -1772,8 +1772,8 @@ var MyBetsTabContent = React.createClass({
               // wager
               el.td(
                 null,
-                helpers.round10(bet.wager/100, -2),
-                ' bits'
+                helpers.round10(bet.wager, -2),
+                ' satoshis'
               ),
               // target
               el.td(
@@ -1792,9 +1792,9 @@ var MyBetsTabContent = React.createClass({
               el.td(
                 {style: {color: bet.profit > 0 ? 'green' : 'red'}},
                 bet.profit > 0 ?
-                  '+' + helpers.round10(bet.profit/100, -2) :
-                  helpers.round10(bet.profit/100, -2),
-                ' bits'
+                  '+' + helpers.round10(bet.profit, -2) :
+                  helpers.round10(bet.profit, -2),
+                ' satoshis'
               )
             );
           }).reverse()
