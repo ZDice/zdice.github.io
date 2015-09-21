@@ -5,6 +5,9 @@ body {
     margin-left: auto;
     margin-right: auto;
 }
+.panel.panel-default{
+	background-color: black;
+}
 .btn.navbar-btn.btn-xs {
 	color: black;
 	background-color: #32cd32;
