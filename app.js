@@ -24,7 +24,7 @@ var config = {
   force_https_redirect: !isRunningLocally(),
   // - Configure the house edge (default is 1%)
   //   Must be between 0.0 (0%) and 1.0 (100%)
-  house_edge: 0.005,
+  house_edge: randomInt(0.005, 0.009),
   chat_buffer_size: 250,
   // - The amount of bets to show on screen in each tab
   bet_buffer_size: 25
@@ -278,7 +278,7 @@ var MoneyPot = (function() {
   // - payout: how many satoshis to pay out total on win (wager * multiplier)
   o.placeSimpleDiceBet = function(bodyParams, callbacks) {
     var endpoint = '/bets/simple-dice';
-    config.house_edge = 0.005;
+    config.house_edge = randomInt(0.005, 0.009);
     makeMPRequest('POST', bodyParams, endpoint, callbacks);
   };
 
