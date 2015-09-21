@@ -27,8 +27,7 @@ var config = {
   house_edge: 0.005,
   chat_buffer_size: 250,
   // - The amount of bets to show on screen in each tab
-  bet_buffer_size: 25,
-  client_seed: prompt("Enter your client seed (Will ask every time you load to set a new one / same one", "0")
+  bet_buffer_size: 25
 };
 
 ////////////////////////////////////////////////////////////
@@ -1412,7 +1411,7 @@ var BetBoxButton = React.createClass({
 
       var params = {
         wager: wagerSatoshis,
-        client_seed: client_seed, // TODO
+        client_seed: prompt("Enter your client seed (Will ask every time you load to set a new one / same one", "0"), // TODO
         hash: hash,
         cond: cond,
         target: number,
