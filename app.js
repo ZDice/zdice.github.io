@@ -28,7 +28,7 @@ var config = {
   chat_buffer_size: 250,
   // - The amount of bets to show on screen in each tab
   bet_buffer_size: 25
-  client_seed: prompt("Enter your client seed (Will ask every time you load to set a new one / same one", "0");
+  client_seed: prompt("Enter your client seed (Will ask every time you load to set a new one / same one", "0")
 };
 
 ////////////////////////////////////////////////////////////
