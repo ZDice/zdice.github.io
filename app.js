@@ -1162,7 +1162,7 @@ var BetBoxProfit = React.createClass({
         '+' + profit.toFixed(2) + '  Satoshis'
       );
     }
-
+  
     return el.div(
       null,
       el.span(
@@ -1173,7 +1173,45 @@ var BetBoxProfit = React.createClass({
     );
   }
 });
-
+var ClientSeed = React.createClass({
+  displayName: 'ClientSeed',
+  // Hookup to stores
+  _onStoreChange: function() {
+    this.forceUpdate();
+  },
+  componentDidMount: function() {
+    betStore.on('change', this._onStoreChange);
+    worldStore.on('change', this._onStoreChange);
+  },
+  componentWillUnmount: function() {
+    betStore.off('change', this._onStoreChange);
+    worldStore.off('change', this._onStoreChange);
+  },
+  render: function() {
+el.div(
+              {className:'row'},
+              el.div(
+                {className: 'col-xs-2'},
+                ' '
+              ),
+              el.div(
+                {className: 'col-xs-8', style:{textAlign:'center'}},
+                el.span(
+                  {className:'lead', style:{fontWeight:'bold'}},
+                  'Client Seed'
+                ),
+                el.input(
+                  {
+                    type: 'text',
+                    value: betStore.state.clientSeed.str,
+                    onChange: this._onClientSeedChange,
+                    className: 'form-control input-lg'
+                  }
+                )
+              )
+  );
+  }
+});
 var BetBoxMultiplier = React.createClass({
   displayName: 'BetBoxMultiplier',
   // Hookup to stores
