@@ -24,7 +24,7 @@ var config = {
   force_https_redirect: !isRunningLocally(),
   // - Configure the house edge (default is 1%)
   //   Must be between 0.0 (0%) and 1.0 (100%)
-  house_edge: randomInt(0.005, 0.009),
+  house_edge: 0.005,
   chat_buffer_size: 250,
   // - The amount of bets to show on screen in each tab
   bet_buffer_size: 25
@@ -278,7 +278,7 @@ var MoneyPot = (function() {
   // - payout: how many satoshis to pay out total on win (wager * multiplier)
   o.placeSimpleDiceBet = function(bodyParams, callbacks) {
     var endpoint = '/bets/simple-dice';
-    config.house_edge = .01;
+    config.house_edge = .005;
     makeMPRequest('POST', bodyParams, endpoint, callbacks);
   };
 
@@ -516,18 +516,7 @@ var betStore = new Store('bet', {
 
     self.emitter.emit('change', self.state);
   });
-Dispatcher.registerCallback("UPDATE_CLIENT_SEED",function(t){
-    var n = parseInt(t ,10);
-    isNaN(n)||/[^\d]/.test(n.toString())?
-    self.state.clientSeed.error = "NOT_INTEGER":0>n?
-    self.state.clientSeed.error = "TOO_LOW":
-    n > Math.pow(2, 32) - 1?
-    self.state.clientSeed.error = "TOO_HIGH":(
-    self.state.clientSeed.error = void 0,
-    self.state.clientSeed.str = n.toString(),
-    self.state.clientSeed.num = n),
-    self.emitter.emit("change", self.state)
-  });
+
   Dispatcher.registerCallback('UPDATE_MULTIPLIER', function(newMult) {
     self.state.multiplier = _.merge({}, self.state.multiplier, newMult);
     self.emitter.emit('change', self.state);
@@ -1422,7 +1411,7 @@ var BetBoxButton = React.createClass({
 
       var params = {
         wager: wagerSatoshis,
-        client_seed: betStore.state.clientSeed.num , // TODO
+        client_seed: randomInt(0,5000) , // TODO
         hash: hash,
         cond: cond,
         target: number,
@@ -1608,11 +1597,7 @@ var BetBox = React.createClass({
   componentWillUnmount: function() {
     worldStore.off('change', this._onStoreChange);
   },
-  _onClientSeedChange:function(e){
-    var str = e.target.value;
-    Dispatcher.sendAction("UPDATE_CLIENT_SEED", str);
-    this.forceUpdate();
-  },
+  
   render: function() {
     return el.div(
       null,
