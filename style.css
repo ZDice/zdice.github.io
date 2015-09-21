@@ -5,6 +5,14 @@ body {
     margin-left: auto;
     margin-right: auto;
 }
+.btn.navbar-btn.btn-xs {
+	color: black;
+	background-color: #32cd32;
+}
+.btn.btn-default.navbar-btn.btn-xs{
+	color: black;
+	background-color: red;
+}
 .close {
 	background: #606061;
 	color: #FFFFFF;
