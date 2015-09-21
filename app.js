@@ -1404,14 +1404,14 @@ var BetBoxButton = React.createClass({
       var wagerSatoshis = betStore.state.wager.num;
       var multiplier = betStore.state.multiplier.num;
       var payoutSatoshis = wagerSatoshis * multiplier;
-      var cSeed = betStore.state.client_seed.num;
+     
       var number = helpers.calcNumber(
         cond, helpers.multiplierToWinProb(multiplier)
       );
 
       var params = {
         wager: wagerSatoshis,
-        client_seed: cSeed , // TODO
+        client_seed: randomInt(0, 100) , // TODO
         hash: hash,
         cond: cond,
         target: number,
