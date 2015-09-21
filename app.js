@@ -516,20 +516,7 @@ var betStore = new Store('bet', {
 
     self.emitter.emit('change', self.state);
   });
-  
-  Dispatcher.registerCallback("UPDATE_CLIENT_SEED",function(t){
-    var n = parseInt(t ,10);
-    isNaN(n)||/[^\d]/.test(n.toString())?
-    self.state.clientSeed.error = "NOT_INTEGER":0>n?
-    self.state.clientSeed.error = "TOO_LOW":
-    n > Math.pow(2, 32) - 1?
-    self.state.clientSeed.error = "TOO_HIGH":(
-    self.state.clientSeed.error = void 0,
-    self.state.clientSeed.str = n.toString(),
-    self.state.clientSeed.num = n),
-    self.emitter.emit("change", self.state)
-  });
-  
+
   Dispatcher.registerCallback('UPDATE_MULTIPLIER', function(newMult) {
     self.state.multiplier = _.merge({}, self.state.multiplier, newMult);
     self.emitter.emit('change', self.state);
@@ -1162,7 +1149,7 @@ var BetBoxProfit = React.createClass({
         '+' + profit.toFixed(2) + '  Satoshis'
       );
     }
-  
+
     return el.div(
       null,
       el.span(
@@ -1173,45 +1160,7 @@ var BetBoxProfit = React.createClass({
     );
   }
 });
-var ClientSeed = React.createClass({
-  displayName: 'ClientSeed',
-  // Hookup to stores
-  _onStoreChange: function() {
-    this.forceUpdate();
-  },
-  componentDidMount: function() {
-    betStore.on('change', this._onStoreChange);
-    worldStore.on('change', this._onStoreChange);
-  },
-  componentWillUnmount: function() {
-    betStore.off('change', this._onStoreChange);
-    worldStore.off('change', this._onStoreChange);
-  },
-  render: function() {
-el.div(
-              {className:'row'},
-              el.div(
-                {className: 'col-xs-2'},
-                ' '
-              ),
-              el.div(
-                {className: 'col-xs-8', style:{textAlign:'center'}},
-                el.span(
-                  {className:'lead', style:{fontWeight:'bold'}},
-                  'Client Seed'
-                ),
-                el.input(
-                  {
-                    type: 'text',
-                    value: betStore.state.clientSeed.str,
-                    onChange: this._onClientSeedChange,
-                    className: 'form-control input-lg'
-                  }
-                )
-              )
-  );
-  }
-});
+
 var BetBoxMultiplier = React.createClass({
   displayName: 'BetBoxMultiplier',
   // Hookup to stores
@@ -1462,7 +1411,7 @@ var BetBoxButton = React.createClass({
 
       var params = {
         wager: wagerSatoshis,
-        client_seed: betStore.state.clientSeed.num , // TODO
+        client_seed: randomInt(0,5000) , // TODO
         hash: hash,
         cond: cond,
         target: number,
@@ -1648,11 +1597,7 @@ var BetBox = React.createClass({
   componentWillUnmount: function() {
     worldStore.off('change', this._onStoreChange);
   },
-  _onClientSeedChange:function(e){
-    var str = e.target.value;
-    Dispatcher.sendAction("UPDATE_CLIENT_SEED", str);
-    this.forceUpdate();
-  },
+  
   render: function() {
     return el.div(
       null,
