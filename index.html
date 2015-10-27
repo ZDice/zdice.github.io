@@ -1,30 +1,47 @@
+
 <!doctype html>
 <head>
-  <title>Z-Dice</title>
-  <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="node_modules/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet">
+  <title>Z Dice</title>
+
+
+  
   <link href="style.css" rel="stylesheet">
+  <link href="application.css" rel="stylesheet">
+
   <link href="custom.css" rel="stylesheet"> <!-- Recommendation: Put your CSS customizations in custom.css -->
+    <script src="node_modules/jquery/dist/jquery.min.js"></script>
+    
+  <script type="text/javascript">
+        $('body').addClass('hidden');
+        $('#blurbg').addClass('hidden');
+
+        $(document).ready(function() {
+        $('body').removeClass('hidden');   // EDIT: Can also use $('html').removeClass('hidden'); 
+            $('#welOverlay').addClass('hidden');
+       
+        });  
+  </script>
+
+  
 </head>
-
 <body>
-  
-  <div id="app"></div>
-  
 
-	<div id="openModal" class="modalDialog">
-	<div>
-		<a href="#close" title="Close" class="close">X</a>
-		<h2>Welcome to Z-Dice</h2>
-		<p>Graphics and coding are under-construction, but enjoy a</p>
-		<p>safe and reliable environment powered by MoneyPot.com</p>
-		<p>You NEVER have to worry about your coins, as they are never</p>
-		<p>in my control. They are controlled by MoneyPot!</p>
-	
-</div>
-</div>
+  <div id="app"></div>
+
+             <aside class="align-left" draggable="true" id="dragme" style="font-family:monospace;color:#0DEB02;z-index:10;left: 5%; top: 18%; height: 30px; width: 60px;font-size:14px;padding-top: 0px;padding-bottom: 0px;padding-right: 0px;padding-left: 0px;background:black;box-shadow: 0px 0px 5px 4px rgb(19, 44, 54);">
+                    
+  <button id="openQB" class="button.sm" style = "height: 30px; width: 60px;background:#3D4247"onclick="openQBot()" >QBot</button>                  
+           
+                
+                
+                
+                
+                </aside>
+  
+  <script src="jQuery.scrollSpeed.js"></script>
+
   <script src="node_modules/react/dist/react.js"></script>
-  <script src="node_modules/jquery/dist/jquery.min.js"></script>
+  <script type="text/javascript" src="countup.js"></script>
   <script src="node_modules/CBuffer/cbuffer.js"></script>
   <script src="vendor/cryptojs-sha256-3.1.2.js"></script>
   <script src="node_modules/socket.io-client/socket.io.js"></script>
