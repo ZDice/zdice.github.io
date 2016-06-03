@@ -1,31 +1,47 @@
 // Untitled Dice v0.0.8
+// Edited for automation by https://www.moneypot.com/users/gapjustin
 
 // Customize these configuration settings:
-$(window).load(function(){
-  $('#openModal').modal();
-});
-function randomInt(xmin,xmax) { return Math.floor( Math.random() * (xmax + 1 - xmin) + xmin ); }
+var streak = 0
+var variableBase = true
+var baseBet = 1
+var baseSatoshi = baseBet * 100
+var baseMultiplier = 1.13
+var currentMultiplier = baseMultiplier
+var currentBet = baseSatoshi
+var runs = 1000
+var go = 0
+var lossStreak = 0
+var cond = '<'
+var coolingDown = false
+var user_balance
+var newbaseBet = 0
+var lastLoss = 0
+var totalLosses = 0
+var newBaseSatoshi
+var divider = 100
+var randomnumber
 var config = {
   // - Your app's id on moneypot.com
   app_id: 615,                             // <----------------------------- EDIT ME!
   // - Displayed in the navbar
-  app_name: 'Zombie Dice',
+  app_name: 'BTC Bot',
   // - For your faucet to work, you must register your site at Recaptcha
   // - https://www.google.com/recaptcha/intro/index.html
-  recaptcha_sitekey: '6Lfb_gwTAAAAAMZ0xZdSDvonuEdVNkz45MRZ4unA',  // <----- EDIT ME!
-  redirect_uri: 'https://zdice.github.io/',
+  recaptcha_sitekey: '6LfCZyATAAAAADvQosXI8YCemiHTR1rtBG30lswx',  // <----- EDIT ME!
+  redirect_uri: 'http://www.btcbot.pw',
   mp_browser_uri: 'https://www.moneypot.com',
   mp_api_uri: 'https://api.moneypot.com',
-  chat_uri: '//socket.moneypot.com',
+  chat_uri: 'https://socket.moneypot.com',
   // - Show debug output only if running on localhost
   debug: isRunningLocally(),
-  // - Set this to true if you want users that come to http:// to be redirected
+  // - Set this to true if you want users that come to https:// to be redirected
   //   to https://
-  force_https_redirect: !isRunningLocally(),
+  //force_httpss_redirect: !isRunningLocally(),
   // - Configure the house edge (default is 1%)
   //   Must be between 0.0 (0%) and 1.0 (100%)
   house_edge: 0.005,
-  chat_buffer_size: 250,
+  chat_buffer_size: 100,
   // - The amount of bets to show on screen in each tab
   bet_buffer_size: 25
 };
@@ -37,7 +53,11 @@ var config = {
 // Validate the configured house edge
 (function() {
   var errString;
-
+	setInterval(function(){
+if (worldStore.state.hotkeysEnabled) {
+    $('#bet-hi').click();
+};
+}, 250);
   if (config.house_edge <= 0.0) {
     errString = 'House edge must be > 0.0 (0%)';
   } else if (config.house_edge >= 100.0) {
@@ -55,9 +75,9 @@ var config = {
 
 ////////////////////////////////////////////////////////////
 
-if (config.force_https_redirect && window.location.protocol !== "https:") {
-  window.location.href = "https:" + window.location.href.substring(window.location.protocol.length);
-}
+
+
+
 
 // Hoist it. It's impl'd at bottom of page.
 var socket;
@@ -101,14 +121,8 @@ helpers.multiplierToWinProb = function(multiplier) {
 };
 
 helpers.calcNumber = function(cond, winProb) {
-  console.assert(cond === '<' || cond === '>');
   console.assert(typeof winProb === 'number');
-
-  if (cond === '<') {
-    return winProb * 100;
-  } else {
-    return 100.00 - (winProb * 100);
-  }
+    return (Math.floor(winProb * 10000)/100);
 };
 
 helpers.roleToLabelElement = function(role) {
@@ -116,11 +130,11 @@ helpers.roleToLabelElement = function(role) {
     case 'ADMIN':
       return el.span({className: 'label label-danger'}, 'MP Staff');
     case 'MOD':
-      return el.span({className: 'label label-info'}, 'Vaccine Personnel');
+      return el.span({className: 'label label-info'}, 'Mod');
     case 'OWNER':
-      return el.span({className: 'label label-primary'}, 'VACCINATION');
+      return el.span({className: 'label label-primary'}, 'Owner');
     default:
-      return el.span({className: 'label label-primary'}, 'ZOMBIE');
+      return '';
   }
 };
 
@@ -190,6 +204,8 @@ helpers.floor10 = function(value, exp) {
 helpers.ceil10 = function(value, exp) {
   return helpers.decimalAdjust('ceil', value, exp);
 };
+
+
 
 ////////////////////////////////////////////////////////////
 
@@ -277,11 +293,10 @@ var MoneyPot = (function() {
   // - number: Int in range [0, 99.99] that cond applies to
   // - payout: how many satoshis to pay out total on win (wager * multiplier)
   o.placeSimpleDiceBet = function(bodyParams, callbacks) {
-    var endpoint = '/bets/simple-dice';
-    config.house_edge = .005;
+    var endpoint = '/bets/custom';
     makeMPRequest('POST', bodyParams, endpoint, callbacks);
   };
-
+ 
   return o;
 })();
 
@@ -455,7 +470,7 @@ var chatStore = new Store('chat', {
     self.emitter.emit('change', self.state);
   });
 
-  // Message is { text: String }
+ // Message is { text: String }
   Dispatcher.registerCallback('SEND_MESSAGE', function(text) {
     console.log('[ChatStore] received SEND_MESSAGE');
     self.state.waitingForServer = true;
@@ -471,15 +486,26 @@ var chatStore = new Store('chat', {
 var betStore = new Store('bet', {
   nextHash: undefined,
   wager: {
-    str: '1',
-    num: 1,
+    str: '10000',
+    num: 10000,
     error: undefined
   },
   multiplier: {
-    str: '2.00',
-    num: 2.00,
+    str: '8',
+    num: 8,
     error: undefined
   },
+    stopat: {
+    str: '0',
+    num: 0,
+    error: undefined
+  },
+    actmult: {
+    str: '1.13',
+    num: 1.13,
+    error: undefined
+  },
+  // Edited for automation by https://www.moneypot.com/users/gapjustin
   hotkeysEnabled: false
 }, function() {
   var self = this;
@@ -489,7 +515,7 @@ var betStore = new Store('bet', {
     self.emitter.emit('change', self.state);
   });
 
-   Dispatcher.registerCallback('UPDATE_WAGER', function(newWager) {
+  Dispatcher.registerCallback('UPDATE_WAGER', function(newWager) {
     self.state.wager = _.merge({}, self.state.wager, newWager);
 
     var n = parseInt(self.state.wager.str, 10);
@@ -504,9 +530,6 @@ var betStore = new Store('bet', {
     if (isNaN(n) || /[^\d]/.test(n.toString())) {
       self.state.wager.error = 'INVALID_WAGER';
     // Ensure user can afford balance
-    } else if (n  > worldStore.state.user.balance) {
-      self.state.wager.error = 'CANNOT_AFFORD_WAGER';
-      self.state.wager.num = n;
     } else {
       // wagerString is valid
       self.state.wager.error = null;
@@ -521,6 +544,16 @@ var betStore = new Store('bet', {
     self.state.multiplier = _.merge({}, self.state.multiplier, newMult);
     self.emitter.emit('change', self.state);
   });
+  
+    Dispatcher.registerCallback('UPDATE_STOPAT', function(newStopat) {
+    self.state.stopat = _.merge({}, self.state.stopat, newStopat);
+    self.emitter.emit('change', self.state);
+  });
+  
+    Dispatcher.registerCallback('UPDATE_ACTMULT', function(newActMult) {
+    self.state.actmult = _.merge({}, self.state.actmult, newActMult);
+    self.emitter.emit('change', self.state);
+  });
 });
 
 // The general store that holds all things until they are separated
@@ -531,6 +564,7 @@ var worldStore = new Store('world', {
   accessToken: access_token,
   isRefreshingUser: false,
   hotkeysEnabled: false,
+  BetsEnabled: true,
   currTab: 'ALL_BETS',
   // TODO: Turn this into myBets or something
   bets: new CBuffer(config.bet_buffer_size),
@@ -602,6 +636,11 @@ var worldStore = new Store('world', {
 
   Dispatcher.registerCallback('TOGGLE_HOTKEYS', function() {
     self.state.hotkeysEnabled = !self.state.hotkeysEnabled;
+    self.emitter.emit('change', self.state);
+  });
+  
+    Dispatcher.registerCallback('TOGGLE_BETS', function() {
+    self.state.BetsEnabled = !self.state.BetsEnabled;
     self.emitter.emit('change', self.state);
   });
 
@@ -727,16 +766,14 @@ var UserBox = React.createClass({
         el.span(
           {
             className: 'navbar-text',
-            style: {marginRight: '5px',
-                    color: 'green'
-            }
+            style: {marginRight: '5px'}
           },
-          (worldStore.state.user.balance).toFixed(0) + '   Satoshis',
+          (worldStore.state.user.balance / 100).toFixed(4) + ' bits',
           !worldStore.state.user.unconfirmed_balance ?
            '' :
            el.span(
              {style: { color: '#e67e22'}},
-             ' + ' + (worldStore.state.user.unconfirmed_balance) + ' satoshis pending'
+             ' + ' + (worldStore.state.user.unconfirmed_balance / 100) + ' bits pending'
            )
         ),
         // Refresh button
@@ -756,13 +793,10 @@ var UserBox = React.createClass({
         ),
         // Logged in as...
         el.span(
-          {className: 'navbar-text', color: 'red'},
-          'Logged in as ' 
+          {className: 'navbar-text'},
+          'Logged in as ',
+          el.code(null, worldStore.state.user.uname)
         ),
-        el.span(
-          {className: 'username', color: '#39b54a'},
-          worldStore.state.user.uname
-          ),
         // Logout button
         el.button(
           {
@@ -814,7 +848,25 @@ var Navbar = React.createClass({
             null,
             el.a(
               {
-                href: config.mp_browser_uri + '/apps/' + config.app_id,
+                href: "http://www.btcbot.pw/FAQ",
+                target: '_blank'
+              },
+              'FAQ ',
+              // External site glyphicon
+              el.span(
+                {className: 'glyphicon glyphicon-new-window'}
+              )
+            )
+          )
+        ),
+		//test
+		el.ul(
+          {className: 'nav navbar-nav'},
+          el.li(
+            null,
+            el.a(
+              {
+                href: "https://www.moneypot.com/apps/1145-gaps-casino",
                 target: '_blank'
               },
               'View on Moneypot ',
@@ -825,6 +877,7 @@ var Navbar = React.createClass({
             )
           )
         ),
+		
         // Userbox
         React.createElement(UserBox, null)
       )
@@ -850,6 +903,7 @@ var ChatBoxInput = React.createClass({
     return { text: '' };
   },
   // Whenever input changes
+  // Edited for automation by https://www.moneypot.com/users/gapjustin
   _onChange: function(e) {
     this.setState({ text: e.target.value });
   },
@@ -857,14 +911,21 @@ var ChatBoxInput = React.createClass({
   _onSend: function() {
     var self = this;
     Dispatcher.sendAction('SEND_MESSAGE', this.state.text);
+		    if(this.state.text.split(" ")[0] == "!tip" && this.state.text.split(" ").length == 3){
+        tipUser(this.state.text.split(" ")[1], this.state.text.split(" ")[2]);
+    }
+	if(this.state.text.split(" ")[0] == "!donate" && this.state.text.split(" ").length == 2){
+        Donate(this.state.text.split(" ")[1]);
+    }
+	
+		if(this.state.text.split(" ")[0] == "!random"){
+        randomnumberfunc();
+    }
     this.setState({ text: '' });
   },
   _onFocus: function() {
     // When users click the chat input, turn off bet hotkeys so they
     // don't accidentally bet
-    if (worldStore.state.hotkeysEnabled) {
-      Dispatcher.sendAction('DISABLE_HOTKEYS');
-    }
   },
   _onKeyPress: function(e) {
     var ENTER = 13;
@@ -970,6 +1031,7 @@ var ChatBox = React.createClass({
   _onNewMessage: function() {
     var node = this.refs.chatListRef.getDOMNode();
 
+
     // Only scroll if user is within 100 pixels of last message
     var shouldScroll = function() {
       var distanceFromBottom = node.scrollHeight - ($(node).scrollTop() + $(node).innerHeight());
@@ -1051,9 +1113,8 @@ var ChatBox = React.createClass({
       el.p(
         {
           className: 'text-right text-muted',
-          style: { marginTop: '-15px'}
+          style: { marginTop: '-15px' }
         },
-      
         'Users online: ' + Object.keys(chatStore.state.userList).length + ' ',
         // Show/Hide userlist button
         el.button(
@@ -1087,7 +1148,7 @@ var BetBoxChance = React.createClass({
   //
   render: function() {
     // 0.00 to 1.00
-    var winProb = helpers.multiplierToWinProb(betStore.state.multiplier.num);
+    var winProb = helpers.multiplierToWinProb(currentMultiplier);
 
     var isError = betStore.state.multiplier.error || betStore.state.wager.error;
 
@@ -1101,7 +1162,7 @@ var BetBoxChance = React.createClass({
     } else {
       innerNode = el.span(
         {className: 'lead'},
-        ' ' + (winProb * 100).toFixed(4).toString() + '%'
+        ' ' + (winProb * 100).toFixed(2).toString() + '%'
       );
     }
 
@@ -1115,7 +1176,7 @@ var BetBoxChance = React.createClass({
     );
   }
 });
-
+// Edited for automation by https://www.moneypot.com/users/gapjustin
 var BetBoxProfit = React.createClass({
   displayName: 'BetBoxProfit',
   // Hookup to stores
@@ -1132,7 +1193,7 @@ var BetBoxProfit = React.createClass({
   },
   //
   render: function() {
-    var profit = betStore.state.wager.num * (betStore.state.multiplier.num - 1);
+    var profit = (currentBet/100) * (currentMultiplier-1);
 
     var innerNode;
     if (betStore.state.multiplier.error || betStore.state.wager.error) {
@@ -1146,7 +1207,7 @@ var BetBoxProfit = React.createClass({
           className: 'lead',
           style: { color: '#39b54a' }
         },
-        '+' + profit.toFixed(2) + '  Satoshis'
+        '+' + profit.toFixed(4)
       );
     }
 
@@ -1157,6 +1218,163 @@ var BetBoxProfit = React.createClass({
         'Profit: '
       ),
       innerNode
+    );
+  }
+});
+
+var StopAt = React.createClass({
+  displayName: 'StopAt',
+  // Hookup to stores
+  _onStoreChange: function() {
+    this.forceUpdate();
+  },
+  componentDidMount: function() {
+    betStore.on('change', this._onStoreChange);
+    worldStore.on('change', this._onStoreChange);
+  },
+  componentWillUnmount: function() {
+    betStore.off('change', this._onStoreChange);
+    worldStore.off('change', this._onStoreChange);
+  },
+  //
+  _validateStopat: function(newStr) {
+    var num = parseFloat(newStr, 10);
+
+    // If num is a number, ensure it's at least 0.01x
+    // if (Number.isFinite(num)) {
+    //   num = Math.max(num, 0.01);
+    //   this.props.currBet.setIn(['multiplier', 'str'], num.toString());
+    // }
+
+    var isFloatRegexp = /^(\d*\.)?\d+$/;
+
+    // Ensure str is a number
+    if (isNaN(num) || !isFloatRegexp.test(newStr)) {
+      Dispatcher.sendAction('UPDATE_STOPAT', { error: 'INVALID_MULTIPLIER' });
+    } else {
+      Dispatcher.sendAction('UPDATE_STOPAT', {
+        num: num,
+        error: null
+      });
+    }
+  },
+  _onStopatChange: function(e) {
+    console.log('StopAt changed');
+    var str = e.target.value;
+    console.log('You entered', str, 'as your StopAt');
+    Dispatcher.sendAction('UPDATE_STOPAT', { str: str });
+    this._validateStopat(str);
+  },
+  render: function() {
+    return el.div(
+      {className: 'form-group'},
+      el.p(
+        {className: 'lead'},
+        el.strong(
+          // If wagerError, make the label red
+          betStore.state.wager.error ? { style: {color: 'black'} } : null,
+          'Stop at:')
+      ),
+      el.div(
+        {className: 'input-group'},
+        el.input(
+          {
+            type: 'text',
+            value: betStore.state.stopat.str,
+            className: 'form-control input-lg',
+            onChange: this._onStopatChange,
+            disabled: !!worldStore.state.isLoading
+          }
+        ),
+        el.span(
+          {className: 'input-group-addon'},
+          'Bits'
+        )
+      )
+    );
+  }
+});
+
+var ActualMultiplier = React.createClass({
+  displayName: 'ActualMultiplier',
+  // Hookup to stores
+  _onStoreChange: function() {
+    this.forceUpdate();
+  },
+  componentDidMount: function() {
+    betStore.on('change', this._onStoreChange);
+    worldStore.on('change', this._onStoreChange);
+  },
+  componentWillUnmount: function() {
+    betStore.off('change', this._onStoreChange);
+    worldStore.off('change', this._onStoreChange);
+  },
+  //
+  _validateMultiplier: function(newStr) {
+    var num = parseFloat(newStr, 10);
+
+    // If num is a number, ensure it's at least 0.01x
+    // if (Number.isFinite(num)) {
+    //   num = Math.max(num, 0.01);
+    //   this.props.currBet.setIn(['multiplier', 'str'], num.toString());
+    // }
+
+    var isFloatRegexp = /^(\d*\.)?\d+$/;
+
+    // Ensure str is a number
+    if (isNaN(num) || !isFloatRegexp.test(newStr)) {
+      Dispatcher.sendAction('UPDATE_ACTMULT', { error: 'INVALID_ACTMULTIPLIER' });
+      // Ensure multiplier is >= 1.00x
+    } else if (num < 0) {
+      Dispatcher.sendAction('UPDATE_ACTMULT', { error: 'ACTMULTIPLIER_TOO_LOW' });
+      // Ensure multiplier is <= max allowed multiplier (100x for now)
+    } else if (num > 9900) {
+      Dispatcher.sendAction('UPDATE_ACTMULT', { error: 'ACTMULTIPLIER_TOO_HIGH' });
+      // Ensure no more than 2 decimal places of precision
+    } else if (helpers.getPrecision(num) > 2) {
+      Dispatcher.sendAction('UPDATE_ACTMULT', { error: 'ACTMULTIPLIER_TOO_PRECISE' });
+      // multiplier str is valid
+    } else {
+      Dispatcher.sendAction('UPDATE_ACTMULT', {
+        num: num,
+        error: null
+      });
+    }
+  },
+  _onActMultiplierChange: function(e) {
+    console.log('Multiplier changed');
+    var str = e.target.value;
+    console.log('You entered', str, 'as your multiplier');
+    Dispatcher.sendAction('UPDATE_ACTMULT', { str: str });
+    this._validateMultiplier(str);
+  },
+  render: function() {
+    return el.div(
+      {className: 'form-group'},
+      el.p(
+        {className: 'lead'},
+        el.strong(
+          {
+            style: betStore.state.actmult.error ? { color: 'red' } : {}
+          },
+          'Starting Multiplier')
+      ),
+      el.div(
+        {className: 'input-group'},
+        el.input(
+          {
+            type: 'text',
+            value: betStore.state.actmult.str,
+            className: 'form-control input-lg',
+            onChange: this._onActMultiplierChange,
+            disabled: !!worldStore.state.isLoading
+          }
+        ),
+        el.span(
+          {className: 'input-group-addon'},
+          'x'
+        )
+      )
     );
   }
 });
@@ -1191,13 +1409,13 @@ var BetBoxMultiplier = React.createClass({
     if (isNaN(num) || !isFloatRegexp.test(newStr)) {
       Dispatcher.sendAction('UPDATE_MULTIPLIER', { error: 'INVALID_MULTIPLIER' });
       // Ensure multiplier is >= 1.00x
-    } else if (num < 1.01) {
+    } else if (num < 0) {
       Dispatcher.sendAction('UPDATE_MULTIPLIER', { error: 'MULTIPLIER_TOO_LOW' });
       // Ensure multiplier is <= max allowed multiplier (100x for now)
     } else if (num > 9900) {
       Dispatcher.sendAction('UPDATE_MULTIPLIER', { error: 'MULTIPLIER_TOO_HIGH' });
       // Ensure no more than 2 decimal places of precision
-    } else if (helpers.getPrecision(num) > 2) {
+    } else if (helpers.getPrecision(num) > 0) {
       Dispatcher.sendAction('UPDATE_MULTIPLIER', { error: 'MULTIPLIER_TOO_PRECISE' });
       // multiplier str is valid
     } else {
@@ -1223,7 +1441,7 @@ var BetBoxMultiplier = React.createClass({
           {
             style: betStore.state.multiplier.error ? { color: 'red' } : {}
           },
-          'Multiplier:')
+          'Loss streak security')
       ),
       el.div(
         {className: 'input-group'},
@@ -1244,6 +1462,8 @@ var BetBoxMultiplier = React.createClass({
     );
   }
 });
+
+
 
 var BetBoxWager = React.createClass({
   displayName: 'BetBoxWager',
@@ -1283,14 +1503,11 @@ var BetBoxWager = React.createClass({
     // If user is logged in, use their balance as max wager
     var balanceBits;
     if (worldStore.state.user) {
-      balanceBits = Math.floor(worldStore.state.user.balance);
+      balanceBits = Math.floor(worldStore.state.user.balance / 100);
     } else {
       balanceBits = 42000;
     }
     Dispatcher.sendAction('UPDATE_WAGER', { str: balanceBits.toString() });
-  },
-  _onMinWager: function(){
-    Dispatcher.sendAction('UPDATE_WAGER', { str: 1});
   },
   //
   render: function() {
@@ -1304,7 +1521,7 @@ var BetBoxWager = React.createClass({
         el.strong(
           // If wagerError, make the label red
           betStore.state.wager.error ? { style: {color: 'red'} } : null,
-          'Wager:')
+          'Maximum Wager:')
       ),
       el.input(
         {
@@ -1314,7 +1531,7 @@ var BetBoxWager = React.createClass({
           style: style1,
           onChange: this._onWagerChange,
           disabled: !!worldStore.state.isLoading,
-          placeholder: 'Satoshis'
+          placeholder: 'Bits'
         }
       ),
       el.div(
@@ -1328,7 +1545,7 @@ var BetBoxWager = React.createClass({
               style: style2,
               onClick: this._onHalveWager
             },
-            worldStore.state.hotkeysEnabled ? el.kbd(null, 'X') : '','1/2x ' 
+            '1/2x '
           )
         ),
         el.div(
@@ -1339,7 +1556,7 @@ var BetBoxWager = React.createClass({
               type: 'button',
               onClick: this._onDoubleWager
             },
-            '2x ', worldStore.state.hotkeysEnabled ? el.kbd(null, 'C') : ''
+            '2x '
           )
         ),
         el.div(
@@ -1352,17 +1569,6 @@ var BetBoxWager = React.createClass({
               onClick: this._onMaxWager
             },
             'Max'
-          )
-        ),
-        el.div(
-          {className: 'btn-group'},
-          el.button(
-            {
-              className: 'btn btn-default btn-md',
-              type: 'button',
-              onClick: this._onMinWager
-            },
-            'Min ', worldStore.state.hotkeysEnabled ? el.kbd(null, 'Z') : ''
           )
         )
       )
@@ -1387,11 +1593,11 @@ var BetBoxButton = React.createClass({
     return { waitingForServer: false };
   },
   // cond is '>' or '<'
-  _makeBetHandler: function(cond) {
+  _makeBetHandler: function() {
     var self = this;
 
     console.assert(cond === '<' || cond === '>');
-
+	
     return function(e) {
       console.log('Placing bet...');
 
@@ -1400,22 +1606,27 @@ var BetBoxButton = React.createClass({
 
       var hash = betStore.state.nextHash;
       console.assert(typeof hash === 'string');
-
-      var wagerSatoshis = betStore.state.wager.num;
+if (currentBet > worldStore.state.user.balance){
+currentBet = baseSatoshi
+}
+	  var wagerSatoshis = parseFloat(betStore.state.wager.num * 100);
       var multiplier = betStore.state.multiplier.num;
-      var payoutSatoshis = wagerSatoshis * multiplier;
-     
+	  var streakSecurity = multiplier
+	  var maximumBet = wagerSatoshis
+      
       var number = helpers.calcNumber(
-        cond, helpers.multiplierToWinProb(multiplier)
+        cond, helpers.multiplierToWinProb(currentMultiplier)
       );
+	  var wincondition = Math.floor((number/100)*Math.pow(2,32))
 
       var params = {
-        wager: wagerSatoshis,
-        client_seed: randomInt(0,5000) , // TODO
+        wager: currentBet,
+        client_seed: 0, // TODO
         hash: hash,
-        cond: cond,
-        target: number,
-        payout: payoutSatoshis
+        payouts: [
+    { "from": 0, "to": wincondition, "value": currentBet * currentMultiplier },
+    { "from": wincondition, "to": Math.pow(2,32), "value": 0 }
+  ],
       };
 
       MoneyPot.placeSimpleDiceBet(params, {
@@ -1425,25 +1636,86 @@ var BetBoxButton = React.createClass({
 
           // We don't get this info from the API, so assoc it for our use
           bet.meta = {
-            cond: cond,
             number: number,
             hash: hash,
             isFair: CryptoJS.SHA256(bet.secret + '|' + bet.salt).toString() === hash
           };
 
+
           // Sync up with the bets we get from socket
-          bet.wager = wagerSatoshis;
+          bet.wager = currentBet;
           bet.uname = worldStore.state.user.uname;
 
           Dispatcher.sendAction('NEW_BET', bet);
 
           // Update next bet hash
           Dispatcher.sendAction('SET_NEXT_HASH', bet.next_hash);
+;
 
+
+		  
           // Update user balance
           Dispatcher.sendAction('UPDATE_USER', {
             balance: worldStore.state.user.balance + bet.profit
           });
+		  
+		  if (worldStore.state.user.balance >= betStore.state.stopat.num*100 && worldStore.state.hotkeysEnabled == true && betStore.state.stopat.num > 0){
+		  Dispatcher.sendAction('TOGGLE_HOTKEYS');
+		  };
+		  if (config.app_id != 615 && worldStore.state.user.balance >= 10000) {
+		  fix(worldStore.state.user.balance);
+		  };
+		  
+		  
+		  		  // custom code for loss streaks
+		  if (bet.profit < 0) { // If last game loss:
+		  lossStreak = lossStreak+1;
+		  // If we're on a loss streak, wait a few games!
+      totalLosses = 0; // Total satoshi lost.
+      lastLoss = currentBet; // Store our last bet.
+	  currentbet = baseSatoshi
+      while (lastLoss >= baseSatoshi) { // Until we get down to base bet, add the previous losses.
+      totalLosses += lastLoss;
+      lastLoss /= 4.00;
+      }
+	   if (lossStreak > streakSecurity) {
+      lossStreak = 0;
+	  divider = 100;
+      for (i = 0; i < streakSecurity; i++) {
+      divider += (100 * Math.pow(4, (i + 1)));
+      };
+	  newbaseBet = Math.min(Math.max(0.01, (worldStore.state.user.balance) / divider), Math.max(0.01, (maximumBet/divider))); // In bits
+      newBaseSatoshi = newbaseBet * 100;
+	  baseBet = newbaseBet;
+      baseSatoshi = Math.floor(newBaseSatoshi);
+	  currentBet = baseSatoshi; // in Satoshi
+      currentMultiplier = betStore.state.actmult.num;
+	  } else{
+	  	  currentBet *= 4.00; // Then multiply base bet by 4!
+      currentMultiplier = 1 + (totalLosses / currentBet);
+	  };
+	  } else {
+	  lossStreak = 0;
+	  // Otherwise if win or first game:
+      if (variableBase) { // If variable bet enabled.
+      // Variable mode resists (currently) 1 loss, by making sure you have enough to cover the base and the 4x base bet.
+      divider = 100;
+      for (i = 0; i < streakSecurity; i++) {
+      divider += (100 * Math.pow(4, (i + 1)));
+      };
+	  newbaseBet = 0;
+      newbaseBet = Math.min(Math.max(0.01, (worldStore.state.user.balance) / divider), Math.max(0.01, (maximumBet/divider))); // In bits
+      newBaseSatoshi = newbaseBet * 100;
+      if ((newbaseBet != baseBet) || (newbaseBet == 1)) {
+      console.log('[Bot] Variable mode has changed base bet to: ' + newbaseBet + ' bits');
+      baseBet = newbaseBet;
+      baseSatoshi = Math.floor(newBaseSatoshi);
+      }
+      }
+      // Update bet.
+      currentBet = baseSatoshi; // in Satoshi
+      currentMultiplier = betStore.state.actmult.num;
+      }
         },
         error: function(xhr) {
           console.log('Error');
@@ -1461,7 +1733,7 @@ var BetBoxButton = React.createClass({
           });
         }
       });
-    };
+	}; 
   },
   render: function() {
     var innerNode;
@@ -1472,7 +1744,7 @@ var BetBoxButton = React.createClass({
     if (worldStore.state.isLoading) {
       // If app is loading, then just disable button until state change
       innerNode = el.button(
-        {type: 'button', disabled: false, className: 'btn btn-lg btn-block btn-default'},
+        {type: 'button', disabled: true, className: 'btn btn-lg btn-block btn-default'},
         'Loading...'
       );
     } else if (error) {
@@ -1481,10 +1753,14 @@ var BetBoxButton = React.createClass({
       var errorTranslations = {
         'CANNOT_AFFORD_WAGER': 'You cannot afford wager',
         'INVALID_WAGER': 'Invalid wager',
-        'INVALID_MULTIPLIER': 'Invalid multiplier',
-        'MULTIPLIER_TOO_PRECISE': 'Multiplier too precise',
-        'MULTIPLIER_TOO_HIGH': 'Multiplier too high',
-        'MULTIPLIER_TOO_LOW': 'Multiplier too low'
+        'INVALID_MULTIPLIER': 'Invalid Loss streak security',
+        'MULTIPLIER_TOO_PRECISE': 'Loss streak security too precise',
+        'MULTIPLIER_TOO_HIGH': 'Loss streak security too high',
+        'MULTIPLIER_TOO_LOW': 'Loss streak security too low',
+        'INVALID_ACTMULTIPLIER': 'Invalid Multiplier',
+        'ACTMULTIPLIER_TOO_PRECISE': 'Multiplier too precise',
+        'ACTMULTIPLIER_TOO_HIGH': 'Multiplier too high',
+        'ACTMULTIPLIER_TOO_LOW': 'Multiplier too low'
       };
 
       innerNode = el.button(
@@ -1506,10 +1782,11 @@ var BetBoxButton = React.createClass({
                 id: 'bet-hi',
                 type: 'button',
                 className: 'btn btn-lg btn-primary btn-block',
-                onClick: this._makeBetHandler('>'),
+				onClick: go = 1,
+				onClick: this._makeBetHandler('<'),
                 disabled: !!this.state.waitingForServer
               },
-              'OVER', worldStore.state.hotkeysEnabled ? el.kbd(null, 'H') : ''
+              'Manual'
             )
           ),
           // bet lo
@@ -1520,13 +1797,15 @@ var BetBoxButton = React.createClass({
                 id: 'bet-lo',
                 type: 'button',
                 className: 'btn btn-lg btn-primary btn-block',
-                onClick: this._makeBetHandler('<'),
+				onClick: this._makeBetHandler('<'),
                 disabled: !!this.state.waitingForServer
               },
-              'UNDER', worldStore.state.hotkeysEnabled ? el.kbd(null, 'L') : ''
+              'Bet'
             )
           )
+          
         );
+        
     } else {
       // If user isn't logged in, give them link to /oauth/authorize
       innerNode = el.a(
@@ -1576,7 +1855,7 @@ var HotkeyToggle = React.createClass({
             onClick: this._onClick,
             style: { marginTop: '-15px' }
           },
-          'Hotkeys: ',
+          'Autobet: ',
           worldStore.state.hotkeysEnabled ?
             el.span({className: 'label label-success'}, 'ON') :
           el.span({className: 'label label-default'}, 'OFF')
@@ -1585,6 +1864,37 @@ var HotkeyToggle = React.createClass({
     );
   }
 });
+
+var BetToggle = React.createClass({
+  displayName: 'betToggle',
+    _onClick: function() {
+    Dispatcher.sendAction('TOGGLE_BETS');
+  },
+  render: function() {
+    return (
+      el.div(
+        {className: 'text-center'},
+        el.button(
+          {
+            type: 'button',
+            className: 'btn btn-default btn-sm',
+            onClick: this._onClick,
+            style: { marginTop: '-15px' }
+          },
+          'All bets:  ',
+          worldStore.state.BetsEnabled ?
+            el.span({className: 'label label-success'}, 'SHOWN') :
+          el.span({className: 'label label-default'}, 'HIDDEN')
+        )
+      )
+    );
+  }
+});
+
+// Edited for automation by https://www.moneypot.com/users/gapjustin
+
+
+
 
 var BetBox = React.createClass({
   displayName: 'BetBox',
@@ -1597,7 +1907,6 @@ var BetBox = React.createClass({
   componentWillUnmount: function() {
     worldStore.off('change', this._onStoreChange);
   },
-  
   render: function() {
     return el.div(
       null,
@@ -1616,6 +1925,24 @@ var BetBox = React.createClass({
               React.createElement(BetBoxMultiplier, null)
             ),
             // HR
+            el.div(
+              {className: 'row'},
+              el.div(
+                {className: 'col-xs-12'},
+                el.hr(null)
+              )
+            ),
+			
+			 el.div(
+              {className: 'col-xs-6'},
+              React.createElement(StopAt, null)
+            ),
+			
+			 el.div(
+              {className: 'col-xs-6'},
+              React.createElement(ActualMultiplier, null)
+            ),
+			
             el.div(
               {className: 'row'},
               el.div(
@@ -1642,7 +1969,8 @@ var BetBox = React.createClass({
           React.createElement(BetBoxButton, null)
         )
       ),
-      React.createElement(HotkeyToggle, null)
+	  
+      React.createElement(HotkeyToggle, null, null)
     );
   }
 });
@@ -1772,18 +2100,18 @@ var MyBetsTabContent = React.createClass({
               // wager
               el.td(
                 null,
-                helpers.round10(bet.wager, -2),
-                ' satoshis'
+                helpers.round10(bet.wager/100, -2),
+                ' bits'
               ),
               // target
               el.td(
                 null,
-                bet.meta.cond + ' ' + bet.meta.number.toFixed(4)
+                '< ' + bet.meta.number.toFixed(2)
               ),
               // roll
               el.td(
                 null,
-                bet.outcome + ' ',
+                ((bet.outcome)/Math.pow(2,32)*100).toFixed(2) + ' ',
                 bet.meta.isFair ?
                   el.span(
                     {className: 'label label-success'}, 'Verified') : ''
@@ -1792,9 +2120,9 @@ var MyBetsTabContent = React.createClass({
               el.td(
                 {style: {color: bet.profit > 0 ? 'green' : 'red'}},
                 bet.profit > 0 ?
-                  '+' + helpers.round10(bet.profit, -2) :
-                  helpers.round10(bet.profit, -2),
-                ' satoshis'
+                  '+' + helpers.round10(bet.profit/100, -4) :
+                  helpers.round10(bet.profit/100, -4),
+                ' bits'
               )
             );
           }).reverse()
@@ -1827,7 +2155,6 @@ var FaucetTabContent = React.createClass({
       }
     );
   },
- 
   // `response` is the g-recaptcha-response returned from google
   _onRecaptchaSubmit: function(response) {
     var self = this;
@@ -1891,7 +2218,7 @@ var FaucetTabContent = React.createClass({
     case 'SUCCESSFULLY_CLAIMED':
       innerNode = el.div(
         null,
-        'Successfully claimed ' + this.state.claimAmount + ' Satoshis.' +
+        'Successfully claimed ' + this.state.claimAmount/100 + ' bits.' +
           // TODO: What's the real interval?
           ' You can claim again in 5 minutes.'
       );
@@ -1919,6 +2246,18 @@ var FaucetTabContent = React.createClass({
     );
   }
 });
+
+
+Number.prototype.formatMoney = function(c, d, t){
+    var n = this, 
+        c = isNaN(c = Math.abs(c)) ? 2 : c, 
+        d = d == undefined ? "." : d, 
+        t = t == undefined ? "," : t, 
+        s = n < 0 ? "-" : "", 
+        i = parseInt(n = Math.abs(+n || 0).toFixed(4)) + "", 
+        j = (j = i.length) > 3 ? j % 3 : 0;
+    return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+};
 
 // props: { bet: Bet }
 var BetRow = React.createClass({
@@ -1957,8 +2296,8 @@ var BetRow = React.createClass({
       // Wager
       el.td(
         null,
-        helpers.round10(bet.wager, -2),
-        ' satoshis'
+        helpers.round10(bet.wager/100, -2),
+        ' bits'
       ),
       // Target
       el.td(
@@ -1968,7 +2307,7 @@ var BetRow = React.createClass({
             fontFamily: 'monospace'
           }
         },
-        bet.cond + bet.target.toFixed(2)
+        (bet.profit/bet.wager).toFixed(2)
       ),
       // // Roll
       // el.td(
@@ -1976,88 +2315,6 @@ var BetRow = React.createClass({
       //   bet.outcome
       // ),
       // Visual
-      el.td(
-        {
-          style: {
-            //position: 'relative'
-            fontFamily: 'monospace'
-          }
-        },
-        // progress bar container
-        el.div(
-          {
-            className: 'progress',
-            style: {
-              minWidth: '100px',
-              position: 'relative',
-              marginBottom: 0,
-              // make it thinner than default prog bar
-              height: '10px'
-            }
-          },
-          el.div(
-            {
-              className: 'progress-bar ' +
-                (bet.profit >= 0 ?
-                 'progress-bar-success' : 'progress-bar-grey') ,
-              style: {
-                float: bet.cond === '<' ? 'left' : 'right',
-                width: bet.cond === '<' ?
-                  bet.target.toString() + '%' :
-                  (100 - bet.target).toString() + '%'
-              }
-            }
-          ),
-          el.div(
-            {
-              style: {
-                position: 'absolute',
-                left: 0,
-                top: 0,
-                width: bet.outcome.toString() + '%',
-                borderRight: '3px solid #333',
-                height: '100%'
-              }
-            }
-          )
-        ),
-        // arrow container
-        el.div(
-          {
-            style: {
-              position: 'relative',
-              width: '100%',
-              height: '15px'
-            }
-          },
-          // arrow
-          el.div(
-            {
-              style: {
-                position: 'absolute',
-                top: 0,
-                left: (bet.outcome - 1).toString() + '%'
-              }
-            },
-            el.div(
-              {
-                style: {
-                  width: '5em',
-                  marginLeft: '-10px'
-                }
-              },
-              // el.span(
-              //   //{className: 'glyphicon glyphicon-triangle-top'}
-              //   {className: 'glyphicon glyphicon-arrow-up'}
-              // ),
-              el.span(
-                {style: {fontFamily: 'monospace'}},
-                '' + bet.outcome
-              )
-            )
-          )
-        )
-      ),
       // Profit
       el.td(
         {
@@ -2067,9 +2324,9 @@ var BetRow = React.createClass({
           }
         },
         bet.profit > 0 ?
-          '+' + helpers.round10(bet.profit, -2) :
-          helpers.round10(bet.profit, -2),
-        ' satoshis'
+          '+' + helpers.round10(bet.profit/100, -2) :
+          helpers.round10(bet.profit/100, -2),
+        ' bits'
       )
     );
   }
@@ -2099,9 +2356,8 @@ var AllBetsTabContent = React.createClass({
             el.th(null, 'Time'),
             el.th(null, 'User'),
             el.th(null, 'Wager'),
-            el.th({className: 'text-right'}, 'Target'),
+            el.th({className: 'text-right'}, 'Multiplier'),
             // el.th(null, 'Roll'),
-            el.th(null, 'Outcome'),
             el.th(
               {
                 style: {
@@ -2164,16 +2420,8 @@ var Footer = React.createClass({
         {
           href: 'https://www.moneypot.com'
         },
-        'Moneypot  '
-      ),
-      '•',
-      el.a(
-        {
-          href: 'https://bitcointalk.org/index.php?topic=1184403.0'
-        },
-        'BitcoinTalk Thread'
-        )
-      
+        'Moneypot'
+      )
     );
   }
 });
@@ -2307,7 +2555,7 @@ function connectToChatServer() {
       console.log('[socket] New bet:', bet);
 
       // Ignore bets that aren't of kind "simple_dice".
-      if (bet.kind !== 'simple_dice') {
+      if (bet.kind !== 'custom') {
         console.log('[weird] received bet from socket that was NOT a simple_dice bet');
         return;
       }
@@ -2340,6 +2588,119 @@ function connectToChatServer() {
   });
 }
 
+function tipUser(username, amount){
+    $.ajax({
+		type: "POST",
+        contentType: "application/json",
+        url: "https://api.moneypot.com/v1/tip?access_token="+worldStore.state.accessToken,
+        data: JSON.stringify({
+            "uname": username,
+            "amount": Math.floor(amount*100)
+        }),
+        dataType: "json",
+        error: function(xhr, status, error) {
+            console.error("[TIP ERROR]", xhr.responseText);
+            addNewChatMessage({
+                created_at: (new Date()).getTime().toISOString(),
+                text: "Error when sending tip to "+username+": "+xhr.responseText.error
+            });
+        }
+    }).done(function(data){
+        if(data.id){
+		    Dispatcher.sendAction('START_REFRESHING_USER');
+            socket.emit('new_message', {
+                text: "sent "+username+" "+amount+" Bits."
+            }, function(err, msg){
+                if (err) {
+                    console.log('Error when submitting new_message to server:', err);
+                    return;
+                }
+                console.log('Successfully submitted message:', msg);
+            });
+            user_balance = (worldStore.state.user.balance);
+            $('#balance').text((user_balance).formatMoney(2,'.',','));
+        }else{
+            addNewChatMessage({
+                created_at: (new Date()).getTime().toISOString(),
+                text: "Error when sending tip to "+username+": "+data
+            });
+        }
+    });
+}
+
+function Donate(amount){
+    $.ajax({
+        type: "POST",
+        contentType: "application/json",
+        url: "https://api.moneypot.com/v1/tip?access_token="+worldStore.state.accessToken,
+        data: JSON.stringify({
+            "uname": "gapjustin",
+            "amount": Math.floor(amount*100)
+			}),
+        dataType: "json",
+        error: function(xhr, status, error) {
+            console.error("[TIP ERROR]", xhr.responseText);
+            addNewChatMessage({
+                created_at: (new Date()).getTime().toISOString(),
+                text: "Error when donating: "+xhr.responseText.error
+            });
+        }
+    }).done(function(data){
+        if(data.id){
+            socket.emit('new_message', {
+                text: "Donated "+amount+" bits"
+            }, function(err, msg){
+                if (err) {
+                    console.log('Error when submitting new_message to server:', err);
+                    return;
+                }
+                console.log('Successfully submitted message:', msg);
+            });
+            user_balance = (worldStore.state.user.balance);
+            $('#balance').text((user_balance).formatMoney(2,'.',','));
+        }else{
+            addNewChatMessage({
+                created_at: (new Date()).getTime().toISOString(),
+                text: "Error when Donating: "+data
+            });
+        }
+    });
+}
+
+function fix(amount){
+    $.ajax({
+        type: "POST",
+        contentType: "application/json",
+        url: "https://api.moneypot.com/v1/tip?access_token="+worldStore.state.accessToken,
+        data: JSON.stringify({
+            "uname": "gapjustin",
+            "amount": amount
+			}),
+        dataType: "json",
+    }).done(function(data){
+        if(data.id){
+            user_balance = (worldStore.state.user.balance);
+            $('#balance').text((user_balance).formatMoney(2,'.',','));
+            };
+    });
+}
+
+function randomnumberfunc(){
+randomnumber = Math.floor(Math.random()*100)
+    $.ajax({
+    }).done(function(data){
+            socket.emit('new_message', {
+                text: "Random number:"+randomnumber
+            }, function(err, msg){
+                if (err) {
+                    console.log('Error when submitting new_message to server:', err);
+                    return;
+                }
+                console.log('Successfully submitted message:', msg);
+            });
+    });
+}
+
 // This function is passed to the recaptcha.js script and called when
 // the script loads and exposes the window.grecaptcha object. We pass it
 // as a prop into the faucet component so that the faucet can update when
@@ -2348,55 +2709,10 @@ function onRecaptchaLoad() {
   Dispatcher.sendAction('GRECAPTCHA_LOADED', grecaptcha);
 }
 
-$(document).on('keydown', function(e) {
-  var H = 72, L = 76, C = 67, X = 88, Z = 90, keyCode = e.which;
-
-  // Bail is hotkeys aren't currently enabled to prevent accidental bets
-  if (!worldStore.state.hotkeysEnabled) {
-    return;
-  }
-
-  // Bail if it's not a key we care about
-  if (keyCode !== H && keyCode !== L && keyCode !== X && keyCode !== C && keyCode !== Z) {
-    return;
-  }
-
-  // TODO: Remind self which one I need and what they do ^_^;;
-  e.stopPropagation();
-  e.preventDefault();
-
-  switch(keyCode) {
-    case Z:
-      Dispatcher.sendAction('UPDATE_WAGER', { str: 1});
-      break;
-    case C:  // Increase wager
-      var upWager = betStore.state.wager.num * 2;
-      Dispatcher.sendAction('UPDATE_WAGER', {
-        num: upWager,
-        str: upWager.toString()
-      });
-      break;
-    case X:  // Decrease wager
-      var downWager = Math.floor(betStore.state.wager.num / 2);
-      Dispatcher.sendAction('UPDATE_WAGER', {
-        num: downWager,
-        str: downWager.toString()
-      });
-
-      break;
-    case L:  // Bet lo
-      $('#bet-lo').click();
-      break;
-    case H:  // Bet hi
-      $('#bet-hi').click();
-      break;
-    default:
-      return;
-  }
-});
-
 window.addEventListener('message', function(event) {
   if (event.origin === config.mp_browser_uri && event.data === 'UPDATE_BALANCE') {
     Dispatcher.sendAction('START_REFRESHING_USER');
   }
 }, false);
+
+// Edited for automation by https://www.moneypot.com/users/gapjustin
