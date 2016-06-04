@@ -4,7 +4,7 @@
 // Customize these configuration settings:
 var streak = 0
 var variableBase = true
-var baseBet = 1
+var baseBet = 7
 var baseSatoshi = baseBet * 100
 var baseMultiplier = 1.13
 var currentMultiplier = baseMultiplier
