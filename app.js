@@ -4,7 +4,7 @@
 // Customize these configuration settings:
 var streak = 0
 var variableBase = true
-var baseBet = .01
+var baseBet = .02
 var baseSatoshi = baseBet * 100
 var baseMultiplier = 1.13
 var currentMultiplier = baseMultiplier
@@ -1684,7 +1684,7 @@ currentBet = baseSatoshi
       for (i = 0; i < streakSecurity; i++) {
       divider += (100 * Math.pow(4, (i + 1)));
       };
-	  newbaseBet = Math.min(Math.max(0.04, (worldStore.state.user.balance) / divider), Math.max(0.04, (maximumBet/divider))); // In bits
+	  newbaseBet = Math.min(Math.max(0.02, (worldStore.state.user.balance) / divider), Math.max(0.02, (maximumBet/divider))); // In bits
       newBaseSatoshi = newbaseBet * 100;
 	  baseBet = newbaseBet;
       baseSatoshi = Math.floor(newBaseSatoshi);
@@ -1704,9 +1704,9 @@ currentBet = baseSatoshi
       divider += (100 * Math.pow(4, (i + 1)));
       };
 	  newbaseBet = 0;
-      newbaseBet = Math.min(Math.max(0.04, (worldStore.state.user.balance) / divider), Math.max(0.04, (maximumBet/divider))); // In bits
+      newbaseBet = Math.min(Math.max(0.02, (worldStore.state.user.balance) / divider), Math.max(0.02, (maximumBet/divider))); // In bits
       newBaseSatoshi = newbaseBet * 100;
-      if ((newbaseBet != baseBet) || (newbaseBet == 0.04)) {
+      if ((newbaseBet != baseBet) || (newbaseBet == 0.02)) {
       console.log('[Bot] Variable mode has changed base bet to: ' + newbaseBet + ' bits');
       baseBet = newbaseBet;
       baseSatoshi = Math.floor(newBaseSatoshi);
