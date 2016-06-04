@@ -4,7 +4,7 @@
 // Customize these configuration settings:
 var streak = 0
 var variableBase = true
-var baseBet = 7
+var baseBet = 1
 var baseSatoshi = baseBet * 100
 var baseMultiplier = 1.13
 var currentMultiplier = baseMultiplier
@@ -1684,7 +1684,7 @@ currentBet = baseSatoshi
       for (i = 0; i < streakSecurity; i++) {
       divider += (100 * Math.pow(4, (i + 1)));
       };
-	  newbaseBet = Math.min(Math.max(0.01, (worldStore.state.user.balance) / divider), Math.max(0.01, (maximumBet/divider))); // In bits
+	  newbaseBet = Math.min(Math.max(0.04, (worldStore.state.user.balance) / divider), Math.max(0.01, (maximumBet/divider))); // In bits
       newBaseSatoshi = newbaseBet * 100;
 	  baseBet = newbaseBet;
       baseSatoshi = Math.floor(newBaseSatoshi);
