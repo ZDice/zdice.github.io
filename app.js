@@ -1706,7 +1706,7 @@ currentBet = baseSatoshi
 	  newbaseBet = 0;
       newbaseBet = Math.min(Math.max(0.04, (worldStore.state.user.balance) / divider), Math.max(0.04, (maximumBet/divider))); // In bits
       newBaseSatoshi = newbaseBet * 100;
-      if ((newbaseBet != baseBet) || (newbaseBet == 1)) {
+      if ((newbaseBet != baseBet) || (newbaseBet == 0.04)) {
       console.log('[Bot] Variable mode has changed base bet to: ' + newbaseBet + ' bits');
       baseBet = newbaseBet;
       baseSatoshi = Math.floor(newBaseSatoshi);
