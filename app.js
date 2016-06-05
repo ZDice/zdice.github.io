@@ -848,7 +848,7 @@ var Navbar = React.createClass({
             null,
             el.a(
               {
-                href: "zdice.github.io/FAQ.html",
+                href: "/FAQ.html",
                 target: '_blank'
               },
               'FAQ ',
