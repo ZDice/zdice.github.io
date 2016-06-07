@@ -866,7 +866,7 @@ var Navbar = React.createClass({
             null,
             el.a(
               {
-                href: "https://www.moneypot.com/apps/1145-gaps-casino",
+                href: "https://www.moneypot.com/apps/615",
                 target: '_blank'
               },
               'View on Moneypot ',
