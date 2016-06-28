@@ -41,7 +41,7 @@ var config = {
   // - Configure the house edge (default is 1%)
   //   Must be between 0.0 (0%) and 1.0 (100%)
   house_edge: 0.005,
-  chat_buffer_size: 100,
+  chat_buffer_size: 0,
   // - The amount of bets to show on screen in each tab
   bet_buffer_size: 25
 };
