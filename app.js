@@ -53,11 +53,7 @@ var config = {
 // Validate the configured house edge
 (function() {
   var errString;
-	setInterval(function(){
-if (worldStore.state.hotkeysEnabled) {
-    $('#bet-hi').click();
-};
-}, 250);
+
   if (config.house_edge <= 0.0) {
     errString = 'House edge must be > 0.0 (0%)';
   } else if (config.house_edge >= 100.0) {
@@ -74,6 +70,7 @@ if (worldStore.state.hotkeysEnabled) {
 })();
 
 ////////////////////////////////////////////////////////////
+
 
 
 
