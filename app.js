@@ -32,16 +32,16 @@ var config = {
  redirect_uri: 'https://zdice.github.io/',
   mp_browser_uri: 'https://www.moneypot.com',
   mp_api_uri: 'https://api.moneypot.com',
-  chat_uri: '//socket.moneypot.com',
+  chat_uri: 'https://socket.moneypot.com',
   // - Show debug output only if running on localhost
   debug: isRunningLocally(),
-  // - Set this to true if you want users that come to http:// to be redirected
+  // - Set this to true if you want users that come to https:// to be redirected
   //   to https://
-  force_https_redirect: !isRunningLocally(),
+  //force_httpss_redirect: !isRunningLocally(),
   // - Configure the house edge (default is 1%)
   //   Must be between 0.0 (0%) and 1.0 (100%)
-  house_edge: 0.01,
-  chat_buffer_size: 250,
+  house_edge: 0.005,
+  chat_buffer_size: 0,
   // - The amount of bets to show on screen in each tab
   bet_buffer_size: 25
 };
@@ -53,7 +53,11 @@ var config = {
 // Validate the configured house edge
 (function() {
   var errString;
-
+	setInterval(function(){
+if (worldStore.state.hotkeysEnabled) {
+    $('#bet-hi').click();
+};
+}, 250);
   if (config.house_edge <= 0.0) {
     errString = 'House edge must be > 0.0 (0%)';
   } else if (config.house_edge >= 100.0) {
@@ -70,7 +74,6 @@ var config = {
 })();
 
 ////////////////////////////////////////////////////////////
-
 
 
 
