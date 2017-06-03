@@ -25,7 +25,7 @@ var config = {
   // - Your app's id on moneypot.com
   app_id: 615,                             // <----------------------------- EDIT ME!
   // - Displayed in the navbar
-  app_name: 'BTC Bot',
+  app_name: 'Zombie Dice',
   // - For your faucet to work, you must register your site at Recaptcha
   // - https://www.google.com/recaptcha/intro/index.html
  recaptcha_sitekey: '6Lfb_gwTAAAAAMZ0xZdSDvonuEdVNkz45MRZ4unA',  // <----- EDIT ME!
@@ -1618,10 +1618,11 @@ currentBet = baseSatoshi
         cond, helpers.multiplierToWinProb(currentMultiplier)
       );
 	  var wincondition = Math.floor((number/100)*Math.pow(2,32))
+	  var randomNMBR = Math.floor(Math.random() * (50000000 - 0 + 1)) + 0;
 
       var params = {
         wager: currentBet,
-        client_seed: 0, // TODO
+        client_seed: randomNMBR, // TODO
         hash: hash,
         payouts: [
     { "from": 0, "to": wincondition, "value": currentBet * currentMultiplier },
